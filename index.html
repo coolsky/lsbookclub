@@ -3,1041 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>도서 정보 관리 시스템</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>도서 목록 - 2025년 11월 4일 오후 10:07</title>
     <style>
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-            }
-            .page-break {
-                page-break-after: always;
-            }
-        }
-        .book-card {
-            cursor: move;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .book-card.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
-        .book-card.drag-over {
-            border-top: 3px solid #f97316;
-        }
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-gray-50">
-    <div class="container mx-auto p-4 sm:p-6 max-w-4xl">
-        
-        <!-- Toast Container -->
-        <div id="toastContainer"></div>
 
-        <!-- Input Form Section -->
-        <div id="inputSection" class="no-print bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-6">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-4">
-                <div class="flex items-center gap-2">
-                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800">도서 정보 관리</h1>
-                </div>
-                <div class="flex gap-2 ml-auto">
-                    <button id="importJsonBtn" 
-                            class="text-sm bg-purple-600 text-white py-1 px-3 rounded hover:bg-purple-700 transition-colors"
-                            title="JSON 파일에서 데이터 가져오기">
-                        📥 가져오기
-                    </button>
-                    <button id="exportJsonBtn" 
-                            class="text-sm bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700 transition-colors"
-                            title="JSON 파일로 내보내기">
-                        📤 내보내기
-                    </button>
-                </div>
-            </div>
-
-            <form id="bookForm" class="space-y-4" novalidate>
-                <!-- URL 입력 -->
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mb-4">
-                    <label for="bookUrl" class="block text-sm font-semibold text-gray-700 mb-2">
-                        🔗 인터넷 서점 URL에서 정보 가져오기 (알라딘)
-                    </label>
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="url" id="bookUrl" 
-                               class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                               placeholder="예: https://aladin.co.kr/shop/wproduct.aspx?ItemId=..."
-                               aria-label="알라딘 도서 URL">
-                        <button type="button" id="fetchBtn"
-                                class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors text-sm font-semibold whitespace-nowrap disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                aria-label="도서 정보 가져오기">
-                            <span id="fetchBtnText">정보 가져오기</span>
-                        </button>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">※ 알라딘 도서 페이지 URL을 입력하면 자동으로 정보를 채웁니다.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- 책 제목 -->
-                    <div class="md:col-span-2">
-                        <label for="bookTitle" class="block text-sm font-semibold text-gray-700 mb-1">
-                            책 제목 <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="bookTitle" required 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 클린 코드"
-                               aria-required="true">
-                        <p class="text-xs text-red-600 mt-1 hidden" id="bookTitleError">책 제목을 입력해주세요.</p>
-                    </div>
-
-                    <!-- 부제목 -->
-                    <div class="md:col-span-2">
-                        <label for="bookSubtitle" class="block text-sm font-semibold text-gray-700 mb-1">
-                            부제목
-                        </label>
-                        <input type="text" id="bookSubtitle" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 애자일 소프트웨어 장인 정신">
-                    </div>
-
-                    <!-- 원제 -->
-                    <div class="md:col-span-2">
-                        <label for="bookOriginalTitle" class="block text-sm font-semibold text-gray-700 mb-1">
-                            원제 (번역서인 경우)
-                        </label>
-                        <input type="text" id="bookOriginalTitle" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: Clean Code: A Handbook of Agile Software Craftsmanship">
-                    </div>
-
-                    <!-- 저자 -->
-                    <div>
-                        <label for="bookAuthor" class="block text-sm font-semibold text-gray-700 mb-1">
-                            저자 <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="bookAuthor" required 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 로버트 C. 마틴"
-                               aria-required="true">
-                        <p class="text-xs text-red-600 mt-1 hidden" id="bookAuthorError">저자를 입력해주세요.</p>
-                    </div>
-
-                    <!-- 옮긴이 -->
-                    <div>
-                        <label for="bookTranslator" class="block text-sm font-semibold text-gray-700 mb-1">
-                            옮긴이 (번역서인 경우)
-                        </label>
-                        <input type="text" id="bookTranslator" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 이해영">
-                    </div>
-
-                    <!-- 출판사 -->
-                    <div>
-                        <label for="bookPublisher" class="block text-sm font-semibold text-gray-700 mb-1">
-                            출판사
-                        </label>
-                        <input type="text" id="bookPublisher" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 인사이트">
-                    </div>
-
-                    <!-- 출판일 -->
-                    <div>
-                        <label for="bookPublishDate" class="block text-sm font-semibold text-gray-700 mb-1">
-                            출판일/연도
-                        </label>
-                        <input type="text" id="bookPublishDate" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 2024 또는 2024-03 또는 2024-03-15">
-                    </div>
-
-                    <!-- 페이지 수 -->
-                    <div>
-                        <label for="bookPages" class="block text-sm font-semibold text-gray-700 mb-1">
-                            페이지 수
-                        </label>
-                        <input type="number" id="bookPages" min="1"
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 500">
-                    </div>
-
-                    <!-- 제본 방식 -->
-                    <div>
-                        <label for="bookBinding" class="block text-sm font-semibold text-gray-700 mb-1">
-                            제본 방식
-                        </label>
-                        <input type="text" id="bookBinding"
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 양장본, 무선제본">
-                    </div>
-
-                    <!-- 크기 -->
-                    <div>
-                        <label for="bookSize" class="block text-sm font-semibold text-gray-700 mb-1">
-                            크기
-                        </label>
-                        <input type="text" id="bookSize"
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 152*223mm (A5신)">
-                    </div>
-
-                    <!-- 무게 -->
-                    <div>
-                        <label for="bookWeight" class="block text-sm font-semibold text-gray-700 mb-1">
-                            무게
-                        </label>
-                        <input type="text" id="bookWeight"
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 900g">
-                    </div>
-
-                    <!-- ISBN -->
-                    <div>
-                        <label for="bookIsbn" class="block text-sm font-semibold text-gray-700 mb-1">
-                            ISBN
-                        </label>
-                        <input type="text" id="bookIsbn" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 978-89-6626-235-9">
-                    </div>
-
-                    <!-- 가격 -->
-                    <div>
-                        <label for="bookPrice" class="block text-sm font-semibold text-gray-700 mb-1">
-                            가격 (원)
-                        </label>
-                        <input type="number" id="bookPrice" min="0"
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: 33000">
-                    </div>
-
-                    <!-- 책 설명 -->
-                    <div class="md:col-span-2">
-                        <label for="bookDescription" class="block text-sm font-semibold text-gray-700 mb-1">
-                            책 설명
-                        </label>
-                        <textarea id="bookDescription" rows="4"
-                                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                                  placeholder="책에 대한 간단한 설명을 입력하세요..."></textarea>
-                    </div>
-
-                    <!-- 표지 이미지 URL -->
-                    <div class="md:col-span-2">
-                        <label for="bookCoverUrl" class="block text-sm font-semibold text-gray-700 mb-1">
-                            표지 이미지 URL
-                        </label>
-                        <input type="url" id="bookCoverUrl" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                               placeholder="예: https://example.com/book-cover.jpg">
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button type="submit" 
-                            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors font-semibold disabled:bg-blue-300"
-                            aria-label="도서 목록에 추가">
-                        ➕ 책 추가
-                    </button>
-                    <button type="button" id="resetBtn"
-                            class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors font-semibold"
-                            aria-label="입력 폼 초기화">
-                        🔄 초기화
-                    </button>
-                </div>
-            </form>
-
-            <!-- Added Books List -->
-            <div id="addedBooksSection" class="hidden mt-6 pt-6 border-t border-gray-200">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
-                    <h2 class="text-lg font-bold text-gray-800">
-                        추가된 책 목록 (<span id="bookCount">0</span>권)
-                    </h2>
-                    <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                        <input type="text" id="searchInput" 
-                               class="flex-1 sm:flex-none sm:w-48 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                               placeholder="🔍 검색..."
-                               aria-label="도서 검색">
-                        <button id="clearAllBtn" 
-                                class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700 transition-colors font-semibold text-sm"
-                                title="모든 책 삭제"
-                                aria-label="모든 도서 삭제">
-                            🗑️ 전체삭제
-                        </button>
-                        <button id="generateAllBtn" 
-                                class="bg-orange-600 text-white py-1 px-3 rounded hover:bg-orange-700 transition-colors font-semibold text-sm"
-                                aria-label="전체 도서 출력">
-                            📖 전체 출력
-                        </button>
-                    </div>
-                </div>
-                <div id="booksList" class="space-y-2 max-h-96 overflow-y-auto"></div>
-            </div>
-        </div>
-
-        <!-- Output Section -->
-        <div id="outputSection" class="hidden">
-            <!-- Action Buttons -->
-            <div class="no-print flex flex-wrap gap-2 sm:gap-3 mb-4 items-center">
-                <button id="printBtn" 
-                        class="bg-blue-600 text-white py-2 px-3 sm:px-4 rounded hover:bg-blue-700 transition-colors text-sm flex items-center gap-2"
-                        aria-label="인쇄">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                    </svg>
-                    인쇄
-                </button>
-                <button id="exportHtmlBtn" 
-                        class="bg-green-600 text-white py-2 px-3 sm:px-4 rounded hover:bg-green-700 transition-colors text-sm flex items-center gap-2"
-                        aria-label="HTML 파일로 저장">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    HTML 저장
-                </button>
-                <button id="editBtn" 
-                        class="bg-gray-600 text-white py-2 px-3 sm:px-4 rounded hover:bg-gray-700 transition-colors text-sm flex items-center gap-2"
-                        aria-label="편집 모드로 돌아가기">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                    편집
-                </button>
-                <span class="text-xs sm:text-sm text-gray-500 ml-auto hidden sm:inline">
-                    💡 책을 드래그하여 순서 변경
-                </span>
-            </div>
-
-            <!-- Books Display Container -->
-            <div id="booksDisplayContainer" class="space-y-6" role="list" aria-label="도서 목록"></div>
-
-            <!-- Footer -->
-            <div class="bg-white rounded-lg shadow-lg p-4 mt-6 text-center text-xs text-gray-500 no-print">
-                생성일: <span id="generatedDate"></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden file input for JSON import -->
-    <input type="file" id="jsonFileInput" accept=".json" class="hidden" aria-hidden="true">
-
-    <script>
-        // ==================== Application Class ====================
-        class BookManager {
-            constructor() {
-                this.books = [];
-                this.draggedElement = null;
-                this.draggedIndex = null;
-                this.initializeElements();
-                this.loadFromLocalStorage();
-                this.attachEventListeners();
-                this.updateBooksList();
-            }
-
-            initializeElements() {
-                // Form elements
-                this.bookForm = document.getElementById('bookForm');
-                this.resetBtn = document.getElementById('resetBtn');
-                this.generateAllBtn = document.getElementById('generateAllBtn');
-                this.fetchBtn = document.getElementById('fetchBtn');
-                this.printBtn = document.getElementById('printBtn');
-                this.exportHtmlBtn = document.getElementById('exportHtmlBtn');
-                this.exportJsonBtn = document.getElementById('exportJsonBtn');
-                this.importJsonBtn = document.getElementById('importJsonBtn');
-                this.editBtn = document.getElementById('editBtn');
-                this.clearAllBtn = document.getElementById('clearAllBtn');
-                this.searchInput = document.getElementById('searchInput');
-                
-                // Section elements
-                this.inputSection = document.getElementById('inputSection');
-                this.outputSection = document.getElementById('outputSection');
-                this.addedBooksSection = document.getElementById('addedBooksSection');
-                this.booksList = document.getElementById('booksList');
-                this.bookCount = document.getElementById('bookCount');
-                this.booksDisplayContainer = document.getElementById('booksDisplayContainer');
-                
-                // Input elements
-                this.bookUrlInput = document.getElementById('bookUrl');
-                this.jsonFileInput = document.getElementById('jsonFileInput');
-                this.toastContainer = document.getElementById('toastContainer');
-            }
-
-            attachEventListeners() {
-                this.bookForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
-                this.resetBtn.addEventListener('click', () => this.resetForm());
-                this.generateAllBtn.addEventListener('click', () => this.generateAllOutput());
-                this.fetchBtn.addEventListener('click', () => this.fetchBookInfo());
-                this.printBtn.addEventListener('click', () => window.print());
-                this.exportHtmlBtn.addEventListener('click', () => this.exportToHtml());
-                this.exportJsonBtn.addEventListener('click', () => this.exportToJson());
-                this.importJsonBtn.addEventListener('click', () => this.jsonFileInput.click());
-                this.jsonFileInput.addEventListener('change', (e) => this.importFromJson(e));
-                this.editBtn.addEventListener('click', () => this.showEditMode());
-                this.clearAllBtn.addEventListener('click', () => this.clearAllBooks());
-                this.searchInput.addEventListener('input', (e) => this.searchBooks(e.target.value));
-            }
-
-            // ==================== Toast Notifications ====================
-            showToast(message, type = 'success') {
-                const toast = document.createElement('div');
-                const bgColor = type === 'success' ? 'bg-green-500' : 
-                               type === 'error' ? 'bg-red-500' : 
-                               type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
-                
-                toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 max-w-sm`;
-                toast.innerHTML = `
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>${this.escapeHtml(message)}</span>
-                `;
-                
-                this.toastContainer.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.animation = 'slideIn 0.3s ease-out reverse';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
-
-            // ==================== LocalStorage ====================
-            saveToLocalStorage() {
-                try {
-                    localStorage.setItem('bookManagerData', JSON.stringify(this.books));
-                    return true;
-                } catch (error) {
-                    console.error('LocalStorage save error:', error);
-                    this.showToast('데이터 저장 실패', 'error');
-                    return false;
-                }
-            }
-
-            loadFromLocalStorage() {
-                try {
-                    const data = localStorage.getItem('bookManagerData');
-                    if (data) {
-                        this.books = JSON.parse(data);
-                        this.showToast(`${this.books.length}권의 책을 불러왔습니다.`, 'info');
-                    }
-                } catch (error) {
-                    console.error('LocalStorage load error:', error);
-                    this.showToast('데이터 불러오기 실패', 'error');
-                }
-            }
-
-            // ==================== Form Validation ====================
-            validateForm() {
-                let isValid = true;
-                const title = document.getElementById('bookTitle');
-                const author = document.getElementById('bookAuthor');
-                const titleError = document.getElementById('bookTitleError');
-                const authorError = document.getElementById('bookAuthorError');
-
-                // Reset errors
-                titleError.classList.add('hidden');
-                authorError.classList.add('hidden');
-                title.classList.remove('border-red-500');
-                author.classList.remove('border-red-500');
-
-                if (!title.value.trim()) {
-                    titleError.classList.remove('hidden');
-                    title.classList.add('border-red-500');
-                    isValid = false;
-                }
-
-                if (!author.value.trim()) {
-                    authorError.classList.remove('hidden');
-                    author.classList.add('border-red-500');
-                    isValid = false;
-                }
-
-                return isValid;
-            }
-
-            // ==================== Form Handling ====================
-            handleFormSubmit(e) {
-                e.preventDefault();
-                
-                if (!this.validateForm()) {
-                    this.showToast('필수 항목을 입력해주세요.', 'warning');
-                    return;
-                }
-
-                this.addBook();
-            }
-
-            addBook() {
-                const bookData = {
-                    id: Date.now(),
-                    title: document.getElementById('bookTitle').value.trim(),
-                    subtitle: document.getElementById('bookSubtitle').value.trim(),
-                    originalTitle: document.getElementById('bookOriginalTitle').value.trim(),
-                    author: document.getElementById('bookAuthor').value.trim(),
-                    translator: document.getElementById('bookTranslator').value.trim(),
-                    publisher: document.getElementById('bookPublisher').value.trim(),
-                    publishDate: document.getElementById('bookPublishDate').value.trim(),
-                    pages: document.getElementById('bookPages').value,
-                    binding: document.getElementById('bookBinding').value.trim(),
-                    size: document.getElementById('bookSize').value.trim(),
-                    weight: document.getElementById('bookWeight').value.trim(),
-                    isbn: document.getElementById('bookIsbn').value.trim(),
-                    price: document.getElementById('bookPrice').value,
-                    description: document.getElementById('bookDescription').value.trim(),
-                    coverUrl: document.getElementById('bookCoverUrl').value.trim()
-                };
-
-                this.books.push(bookData);
-                this.saveToLocalStorage();
-                this.updateBooksList();
-                this.resetForm();
-                this.showToast('책이 추가되었습니다!', 'success');
-            }
-
-            resetForm() {
-                this.bookForm.reset();
-                document.getElementById('bookTitleError').classList.add('hidden');
-                document.getElementById('bookAuthorError').classList.add('hidden');
-                document.getElementById('bookTitle').classList.remove('border-red-500');
-                document.getElementById('bookAuthor').classList.remove('border-red-500');
-            }
-
-            // ==================== Book List Management ====================
-            updateBooksList() {
-                if (this.books.length === 0) {
-                    this.addedBooksSection.classList.add('hidden');
-                    return;
-                }
-
-                this.addedBooksSection.classList.remove('hidden');
-                this.bookCount.textContent = this.books.length;
-                this.booksList.innerHTML = '';
-
-                this.books.forEach((book, index) => {
-                    const bookItem = document.createElement('div');
-                    bookItem.className = 'flex items-center justify-between bg-gray-50 p-3 rounded border border-gray-200 hover:bg-gray-100 transition-colors';
-                    bookItem.innerHTML = `
-                        <div class="flex-1 min-w-0">
-                            <div class="font-semibold text-gray-800 truncate">${this.escapeHtml(book.title)}</div>
-                            <div class="text-sm text-gray-600 truncate">${this.escapeHtml(book.author)}</div>
-                        </div>
-                        <button onclick="bookManager.removeBook(${index})" 
-                                class="text-red-600 hover:text-red-800 font-semibold text-sm px-3 py-1 rounded hover:bg-red-50 transition-colors ml-2"
-                                aria-label="${this.escapeHtml(book.title)} 삭제">
-                            삭제
-                        </button>
-                    `;
-                    this.booksList.appendChild(bookItem);
-                });
-            }
-
-            removeBook(index) {
-                if (confirm('이 책을 삭제하시겠습니까?')) {
-                    this.books.splice(index, 1);
-                    this.saveToLocalStorage();
-                    this.updateBooksList();
-                    this.showToast('책이 삭제되었습니다.', 'info');
-                }
-            }
-
-            clearAllBooks() {
-                if (this.books.length === 0) {
-                    this.showToast('삭제할 책이 없습니다.', 'warning');
-                    return;
-                }
-
-                if (confirm(`정말로 모든 책(${this.books.length}권)을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
-                    this.books = [];
-                    this.saveToLocalStorage();
-                    this.updateBooksList();
-                    this.showToast('모든 책이 삭제되었습니다.', 'info');
-                }
-            }
-
-            searchBooks(query) {
-                const items = this.booksList.querySelectorAll('div.flex');
-                const searchTerm = query.toLowerCase().trim();
-
-                items.forEach(item => {
-                    const text = item.textContent.toLowerCase();
-                    if (text.includes(searchTerm)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            }
-
-            // ==================== Fetch Book Info ====================
-            async fetchBookInfo() {
-                const url = this.bookUrlInput.value.trim();
-                
-                if (!url) {
-                    this.showToast('URL을 입력해주세요.', 'warning');
-                    return;
-                }
-
-                if (!url.includes('aladin.co.kr')) {
-                    this.showToast('알라딘 도서 페이지 URL을 입력해주세요.', 'warning');
-                    return;
-                }
-
-                this.setFetchButtonLoading(true);
-
-                try {
-                    const bookInfo = await this.fetchWithRetry(url);
-                    
-                    if (bookInfo && bookInfo.title) {
-                        this.fillFormWithBookInfo(bookInfo);
-                        this.showToast('책 정보를 성공적으로 가져왔습니다!', 'success');
-                    } else {
-                        throw new Error('책 정보를 찾을 수 없습니다.');
-                    }
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                    this.showToast(
-                        '정보를 가져오는데 실패했습니다. 알라딘 페이지에서 직접 복사해주세요.',
-                        'error'
-                    );
-                } finally {
-                    this.setFetchButtonLoading(false);
-                }
-            }
-
-            async fetchWithRetry(url, maxRetries = 2) {
-                const proxies = [
-                    'https://api.allorigins.win/raw?url=',
-                    'https://corsproxy.io/?'
-                ];
-
-                for (let i = 0; i < maxRetries; i++) {
-                    try {
-                        const proxyUrl = proxies[i % proxies.length] + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl);
-                        
-                        if (!response.ok) {
-                            throw new Error(`HTTP ${response.status}`);
-                        }
-
-                        const html = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        
-                        return this.extractAladinInfo(doc);
-                    } catch (error) {
-                        console.error(`Attempt ${i + 1} failed:`, error);
-                        if (i === maxRetries - 1) throw error;
-                    }
-                }
-            }
-
-            extractAladinInfo(doc) {
-                const info = {};
-
-                try {
-                    // 제목 추출
-                    const titleEl = doc.querySelector('meta[property="og:title"]') || 
-                                   doc.querySelector('.book_title a') ||
-                                   doc.querySelector('h1');
-                    if (titleEl) {
-                        const fullTitle = titleEl.getAttribute('content') || titleEl.textContent.trim();
-                        info.title = fullTitle.split('|')[0].trim();
-                    }
-
-                    // 저자, 출판사, 날짜 추출
-                    const infoLi = doc.querySelector('li.Ere_sub2_title');
-                    if (infoLi) {
-                        const allLinks = infoLi.querySelectorAll('a.Ere_sub2_title');
-                        
-                        allLinks.forEach(link => {
-                            const nextText = link.nextSibling ? link.nextSibling.textContent : '';
-                            if (nextText.includes('(지은이)')) {
-                                info.author = link.textContent.trim();
-                            } else if (nextText.includes('(옮긴이)')) {
-                                info.translator = link.textContent.trim();
-                            }
-                        });
-                        
-                        const publisherLink = infoLi.querySelector('a[href*="PublisherSearch"]');
-                        if (publisherLink) {
-                            info.publisher = publisherLink.textContent.trim();
-                        }
-                        
-                        const dateMatch = infoLi.textContent.match(/(\d{4})-(\d{2})-(\d{2})/);
-                        if (dateMatch) {
-                            info.publishDate = dateMatch[1];
-                        }
-                        
-                        const originalTitleLink = infoLi.querySelector('a[href*="SearchTarget=Foreign"]');
-                        if (originalTitleLink) {
-                            info.originalTitle = originalTitleLink.textContent.replace(/^원제\s*:\s*/i, '').trim();
-                        }
-                    }
-
-                    // 기본 정보 추출
-                    const infoList = doc.querySelector('.conts_info_list1');
-                    if (infoList) {
-                        const listItems = infoList.querySelectorAll('li');
-                        
-                        listItems.forEach(li => {
-                            const text = li.textContent.trim();
-                            
-                            if (text.match(/^\d+쪽$/)) {
-                                info.pages = text.replace('쪽', '');
-                            } else if (text.match(/^\d+\*\d+mm$/)) {
-                                info.size = text;
-                            } else if (text.match(/^\d+g$/)) {
-                                info.weight = text;
-                            } else if (text.includes('ISBN')) {
-                                const isbnMatch = text.match(/ISBN\s*:\s*([0-9]+)/);
-                                if (isbnMatch) {
-                                    info.isbn = isbnMatch[1];
-                                }
-                            } else if (text.match(/(양장본|무선제본|반양장|페이퍼백|하드커버)/)) {
-                                info.binding = text;
-                            }
-                        });
-                    }
-
-                    // 가격 추출
-                    const priceListItems = doc.querySelectorAll('.info_list li');
-                    priceListItems.forEach(li => {
-                        const litem = li.querySelector('.Litem');
-                        if (litem && litem.textContent.trim() === '정가') {
-                            const ritem = li.querySelector('.Ritem');
-                            if (ritem) {
-                                const priceText = ritem.textContent.replace(/[^0-9]/g, '');
-                                if (priceText) {
-                                    info.price = priceText;
-                                }
-                            }
-                        }
-                    });
-
-                    // 설명 추출
-                    const descEl = doc.querySelector('.book_summary_wrap') ||
-                                  doc.querySelector('meta[property="og:description"]');
-                    if (descEl) {
-                        let description = descEl.getAttribute('content') || descEl.textContent;
-                        info.description = description.trim().substring(0, 500);
-                    }
-
-                    // 표지 이미지 추출
-                    const coverEl = doc.querySelector('meta[property="og:image"]') ||
-                                   doc.querySelector('#CoverBigImage') ||
-                                   doc.querySelector('img[id*="CoverImage"]');
-                    if (coverEl) {
-                        let coverUrl = coverEl.getAttribute('content') || coverEl.getAttribute('src');
-                        if (coverUrl) {
-                            if (coverUrl.startsWith('//')) {
-                                info.coverUrl = 'https:' + coverUrl;
-                            } else if (coverUrl.startsWith('http')) {
-                                info.coverUrl = coverUrl;
-                            }
-                        }
-                    }
-
-                } catch (error) {
-                    console.error('Parsing error:', error);
-                }
-
-                return info;
-            }
-
-            fillFormWithBookInfo(bookInfo) {
-                const fields = {
-                    bookTitle: bookInfo.title,
-                    bookSubtitle: bookInfo.subtitle,
-                    bookOriginalTitle: bookInfo.originalTitle,
-                    bookAuthor: bookInfo.author,
-                    bookTranslator: bookInfo.translator,
-                    bookPublisher: bookInfo.publisher,
-                    bookPublishDate: bookInfo.publishDate,
-                    bookPages: bookInfo.pages,
-                    bookBinding: bookInfo.binding,
-                    bookSize: bookInfo.size,
-                    bookWeight: bookInfo.weight,
-                    bookIsbn: bookInfo.isbn,
-                    bookPrice: bookInfo.price,
-                    bookDescription: bookInfo.description,
-                    bookCoverUrl: bookInfo.coverUrl
-                };
-
-                Object.entries(fields).forEach(([id, value]) => {
-                    if (value) {
-                        document.getElementById(id).value = value;
-                    }
-                });
-            }
-
-            setFetchButtonLoading(isLoading) {
-                const btnText = document.getElementById('fetchBtnText');
-                if (isLoading) {
-                    this.fetchBtn.disabled = true;
-                    btnText.textContent = '가져오는 중...';
-                    this.fetchBtn.innerHTML = `
-                        <div class="spinner"></div>
-                        <span>가져오는 중...</span>
-                    `;
-                } else {
-                    this.fetchBtn.disabled = false;
-                    this.fetchBtn.innerHTML = '<span id="fetchBtnText">정보 가져오기</span>';
-                }
-            }
-
-            // ==================== Output Generation ====================
-            generateAllOutput() {
-                if (this.books.length === 0) {
-                    this.showToast('출력할 책이 없습니다.', 'warning');
-                    return;
-                }
-
-                this.booksDisplayContainer.innerHTML = '';
-
-                this.books.forEach((bookData, index) => {
-                    const bookCard = this.createBookCard(bookData, index);
-                    this.booksDisplayContainer.appendChild(bookCard);
-                });
-
-                const now = new Date();
-                const generatedDate = now.toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                document.getElementById('generatedDate').textContent = generatedDate;
-
-                this.inputSection.classList.add('hidden');
-                this.outputSection.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            createBookCard(bookData, index) {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-lg shadow-lg overflow-hidden page-break book-card';
-                card.draggable = true;
-                card.dataset.index = index;
-                card.setAttribute('role', 'listitem');
-
-                card.addEventListener('dragstart', (e) => this.handleDragStart(e, card, index));
-                card.addEventListener('dragend', (e) => this.handleDragEnd(e, card));
-                card.addEventListener('dragover', (e) => this.handleDragOver(e, card));
-                card.addEventListener('drop', (e) => this.handleDrop(e, card, index));
-                card.addEventListener('dragleave', (e) => this.handleDragLeave(e, card));
-
-                // wrapper는 이미 생성했으므로 내부 컨텐츠만 필요
-                card.innerHTML = this.generateBookCardHTML(bookData, false);
-                return card;
-            }
-
-            generateBookCardHTML(bookData, includeWrapper = true) {
-                let html = '';
-                
-                // 최상위 wrapper (export 시 필요)
-                if (includeWrapper) {
-                    html += '<div class="bg-white rounded-lg shadow-lg overflow-hidden page-break">\n';
-                }
-                
-                html += `
-                    <div class="bg-gradient-to-r from-orange-500 to-amber-500 p-4 text-white">
-                        <h2 class="text-xl sm:text-2xl font-bold">${this.escapeHtml(bookData.title)}</h2>
-                `;
-                
-                if (bookData.subtitle) {
-                    html += `<p class="text-sm mt-1 opacity-90">${this.escapeHtml(bookData.subtitle)}</p>`;
-                }
-                
-                if (bookData.originalTitle) {
-                    html += `<p class="text-xs mt-1 opacity-75 italic">${this.escapeHtml(bookData.originalTitle)}</p>`;
-                }
-                
-                html += `</div><div class="p-4"><div class="flex flex-col sm:flex-row gap-4">`;
-
-                // Cover image
-                html += `
-                    <div class="flex-shrink-0 mx-auto sm:mx-0">
-                        <div class="bg-gray-100 rounded shadow overflow-hidden w-32 h-44 flex items-center justify-center">
-                `;
-                
-                if (bookData.coverUrl) {
-                    html += `<img src="${this.escapeHtml(bookData.coverUrl)}" class="w-full h-full object-cover" alt="${this.escapeHtml(bookData.title)} 표지" loading="lazy">`;
-                } else {
-                    html += `
-                        <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    `;
-                }
-                
-                html += `</div></div><div class="flex-1 space-y-3"><div class="space-y-1 text-sm">`;
-
-                const fields = [
-                    { label: '저자', value: bookData.author },
-                    { label: '옮긴이', value: bookData.translator },
-                    { label: '출판사', value: bookData.publisher },
-                    { label: '출판일', value: bookData.publishDate },
-                    { label: '페이지', value: bookData.pages, suffix: '쪽' },
-                    { label: '제본', value: bookData.binding },
-                    { label: '크기', value: bookData.size },
-                    { label: '무게', value: bookData.weight },
-                    { label: 'ISBN', value: bookData.isbn }
-                ];
-
-                fields.forEach(field => {
-                    if (field.value) {
-                        html += `
-                            <div>
-                                <span class="text-gray-500">${field.label}:</span>
-                                <span class="text-gray-800 font-semibold ml-2">${this.escapeHtml(field.value)}${field.suffix || ''}</span>
-                            </div>
-                        `;
-                    }
-                });
-
-                if (bookData.price) {
-                    const formattedPrice = Number(bookData.price).toLocaleString('ko-KR');
-                    html += `
-                        <div>
-                            <span class="text-gray-500">가격:</span>
-                            <span class="text-orange-600 font-bold ml-2 text-base">${formattedPrice}원</span>
-                        </div>
-                    `;
-                }
-
-                html += `</div>`;
-
-                if (bookData.description) {
-                    html += `
-                        <div class="pt-2 border-t border-gray-200">
-                            <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${this.escapeHtml(bookData.description)}</p>
-                        </div>
-                    `;
-                }
-
-                html += `</div></div></div>`;
-                
-                // 최상위 wrapper 닫기
-                if (includeWrapper) {
-                    html += '\n</div>';
-                }
-                
-                return html;
-            }
-
-            // ==================== Drag and Drop ====================
-            handleDragStart(e, card, index) {
-                this.draggedElement = card;
-                this.draggedIndex = index;
-                card.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-            }
-
-            handleDragEnd(e, card) {
-                card.classList.remove('dragging');
-                document.querySelectorAll('.book-card').forEach(c => c.classList.remove('drag-over'));
-            }
-
-            handleDragOver(e, card) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                
-                const targetIndex = parseInt(card.dataset.index);
-                if (this.draggedIndex !== targetIndex) {
-                    card.classList.add('drag-over');
-                }
-            }
-
-            handleDragLeave(e, card) {
-                card.classList.remove('drag-over');
-            }
-
-            handleDrop(e, card, targetIndex) {
-                e.stopPropagation();
-                
-                if (this.draggedIndex !== targetIndex && this.draggedIndex !== null) {
-                    const draggedBook = this.books[this.draggedIndex];
-                    this.books.splice(this.draggedIndex, 1);
-                    this.books.splice(targetIndex, 0, draggedBook);
-                    
-                    this.saveToLocalStorage();
-                    this.regenerateOutput();
-                    this.showToast('순서가 변경되었습니다.', 'success');
-                }
-                
-                card.classList.remove('drag-over');
-            }
-
-            regenerateOutput() {
-                this.booksDisplayContainer.innerHTML = '';
-                this.books.forEach((bookData, index) => {
-                    const bookCard = this.createBookCard(bookData, index);
-                    this.booksDisplayContainer.appendChild(bookCard);
-                });
-            }
-
-            showEditMode() {
-                this.outputSection.classList.add('hidden');
-                this.inputSection.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            // ==================== Export Functions ====================
-            exportToHtml() {
-                if (this.books.length === 0) {
-                    this.showToast('출력할 책이 없습니다.', 'warning');
-                    return;
-                }
-
-                const now = new Date();
-                const generatedDate = now.toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-
-                let htmlContent = '<!DOCTYPE html>\n';
-                htmlContent += '<html lang="ko">\n';
-                htmlContent += '<head>\n';
-                htmlContent += '    <meta charset="UTF-8">\n';
-                htmlContent += '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
-                htmlContent += '    <title>도서 목록 - ' + generatedDate + '</title>\n';
-                htmlContent += '    <style>\n';
-                htmlContent += `
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -1099,27 +67,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #e5e7eb;
         }
         .book-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
         .book-cover-placeholder {
-            padding: 1rem;
-            text-align: center;
-            color: #6b7280;
-            font-size: 0.75rem;
-            line-height: 1.4;
-            word-break: keep-all;
-        }
-        .book-cover-icon {
             width: 3rem;
             height: 3rem;
             color: #d1d5db;
-            margin-bottom: 0.5rem;
         }
         .book-details {
             flex: 1;
@@ -1139,6 +96,11 @@
             color: #1f2937;
             font-weight: 600;
             margin-left: 0.5rem;
+        }
+        .book-price {
+            color: #ea580c;
+            font-weight: bold;
+            font-size: 1rem;
         }
         .book-description {
             margin-top: 0.75rem;
@@ -1173,206 +135,604 @@
             .book-cover-container { margin: 0 auto; }
             .book-title { font-size: 1.25rem; }
         }
-`;
-                htmlContent += '    </style>\n';
-                htmlContent += '</head>\n';
-                htmlContent += '<body>\n';
-                htmlContent += '    <div class="container">\n';
-                htmlContent += '        <!-- 안내 메시지 -->\n';
-                htmlContent += '        <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0.5rem;">\n';
-                htmlContent += '            <p style="font-size: 0.875rem; color: #1e40af; margin: 0;">\n';
-                htmlContent += '                <strong>📱 안내:</strong> 카카오톡이나 일부 앱에서는 외부 이미지가 차단될 수 있습니다. 이미지가 보이지 않으면 일반 브라우저(크롬, 사파리 등)로 열어주세요.\n';
-                htmlContent += '            </p>\n';
-                htmlContent += '        </div>\n';
-                htmlContent += '        <div class="space-y-6">\n';
-
-                this.books.forEach(bookData => {
-                    htmlContent += this.generateStandaloneBookCardHTML(bookData);
-                });
-
-                htmlContent += '        </div>\n';
-                htmlContent += '        <div class="footer">\n';
-                htmlContent += '            생성일: ' + generatedDate + '\n';
-                htmlContent += '        </div>\n';
-                htmlContent += '    </div>\n';
-                htmlContent += '</body>\n';
-                htmlContent += '</html>';
-
-                this.downloadFile(htmlContent, 'text/html', '도서목록', 'html');
-                this.showToast('HTML 파일이 다운로드되었습니다.', 'success');
-            }
-
-            generateStandaloneBookCardHTML(bookData) {
-                let html = '<div class="book-card">\n';
-                
-                // Header
-                html += '    <div class="book-header">\n';
-                html += '        <h2 class="book-title">' + this.escapeHtml(bookData.title) + '</h2>\n';
-                
-                if (bookData.subtitle) {
-                    html += '        <p class="book-subtitle">' + this.escapeHtml(bookData.subtitle) + '</p>\n';
-                }
-                
-                if (bookData.originalTitle) {
-                    html += '        <p class="book-original-title">' + this.escapeHtml(bookData.originalTitle) + '</p>\n';
-                }
-                
-                html += '    </div>\n';
-                
-                // Content
-                html += '    <div class="book-content">\n';
-                html += '        <div class="book-layout">\n';
-                
-                // Cover
-                html += '            <div class="book-cover-container">\n';
-                html += '                <div class="book-cover">\n';
-                
-                if (bookData.coverUrl) {
-                    html += '                    <img src="' + this.escapeHtml(bookData.coverUrl) + '" alt="' + this.escapeHtml(bookData.title) + ' 표지" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'book-cover-placeholder\\\'><svg class=\\\'book-cover-icon\\\' fill=\\\'none\\\' stroke=\\\'currentColor\\\' viewBox=\\\'0 0 24 24\\\'><path stroke-linecap=\\\'round\\\' stroke-linejoin=\\\'round\\\' stroke-width=\\\'2\\\' d=\\\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\\\'></path></svg><div>' + this.escapeHtml(bookData.title) + '</div></div>\';">\n';
-                } else {
-                    html += '                    <div class="book-cover-placeholder">\n';
-                    html += '                        <svg class="book-cover-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n';
-                    html += '                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>\n';
-                    html += '                        </svg>\n';
-                    html += '                        <div>' + this.escapeHtml(bookData.title) + '</div>\n';
-                    html += '                    </div>\n';
-                }
-                
-                html += '                </div>\n';
-                html += '            </div>\n';
-                
-                // Details
-                html += '            <div class="book-details">\n';
-                html += '                <div class="book-info-list">\n';
-                
-                const fields = [
-                    { label: '저자', value: bookData.author },
-                    { label: '옮긴이', value: bookData.translator },
-                    { label: '출판사', value: bookData.publisher },
-                    { label: '출판일', value: bookData.publishDate },
-                    { label: '페이지', value: bookData.pages, suffix: '쪽' },
-                    { label: '제본', value: bookData.binding },
-                    { label: '크기', value: bookData.size },
-                    { label: '무게', value: bookData.weight },
-                    { label: 'ISBN', value: bookData.isbn }
-                ];
-
-                fields.forEach(field => {
-                    if (field.value) {
-                        html += '                    <div class="book-info-item">\n';
-                        html += '                        <span class="book-info-label">' + field.label + ':</span>\n';
-                        html += '                        <span class="book-info-value">' + this.escapeHtml(field.value) + (field.suffix || '') + '</span>\n';
-                        html += '                    </div>\n';
-                    }
-                });
-
-                if (bookData.price) {
-                    const formattedPrice = Number(bookData.price).toLocaleString('ko-KR');
-                    html += '                    <div class="book-info-item">\n';
-                    html += '                        <span class="book-info-label">가격:</span>\n';
-                    html += '                        <span class="book-info-value">' + formattedPrice + '원</span>\n';
-                    html += '                    </div>\n';
-                }
-                
-                html += '                </div>\n';
-                
-                if (bookData.description) {
-                    html += '                <div class="book-description">\n';
-                    html += '                    <p>' + this.escapeHtml(bookData.description) + '</p>\n';
-                    html += '                </div>\n';
-                }
-                
-                html += '            </div>\n';
-                html += '        </div>\n';
-                html += '    </div>\n';
-                html += '</div>\n';
-                
-                return html;
-            }
-
-            exportToJson() {
-                if (this.books.length === 0) {
-                    this.showToast('내보낼 책이 없습니다.', 'warning');
-                    return;
-                }
-
-                const data = {
-                    version: '1.0',
-                    exportDate: new Date().toISOString(),
-                    books: this.books
-                };
-
-                const jsonContent = JSON.stringify(data, null, 2);
-                this.downloadFile(jsonContent, 'application/json', '도서데이터', 'json');
-                this.showToast(`${this.books.length}권의 책 데이터가 내보내졌습니다.`, 'success');
-            }
-
-            importFromJson(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        
-                        if (!data.books || !Array.isArray(data.books)) {
-                            throw new Error('Invalid JSON format');
-                        }
-
-                        if (this.books.length > 0) {
-                            if (!confirm('기존 데이터에 추가하시겠습니까?\n(취소 시 기존 데이터 덮어쓰기)')) {
-                                this.books = data.books;
-                            } else {
-                                this.books = [...this.books, ...data.books];
-                            }
-                        } else {
-                            this.books = data.books;
-                        }
-
-                        this.saveToLocalStorage();
-                        this.updateBooksList();
-                        this.showToast(`${data.books.length}권의 책을 불러왔습니다.`, 'success');
-                    } catch (error) {
-                        console.error('Import error:', error);
-                        this.showToast('파일을 불러오는데 실패했습니다.', 'error');
-                    }
-                };
-                reader.readAsText(file);
-                
-                // Reset file input
-                event.target.value = '';
-            }
-
-            downloadFile(content, mimeType, baseName, extension) {
-                const blob = new Blob([content], { type: `${mimeType};charset=utf-8` });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                const now = new Date();
-                const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-                
-                a.href = url;
-                a.download = `${baseName}_${dateStr}.${extension}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-
-            // ==================== Utility Functions ====================
-            escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-        }
-
-        // Initialize the application
-        let bookManager;
-        document.addEventListener('DOMContentLoaded', () => {
-            bookManager = new BookManager();
-        });
-    </script>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="space-y-6">
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">한문이 말하지 못한 한국사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/31937/35/cover500/k482833055_1.jpg" alt="한문이 말하지 못한 한국사 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">장지연</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">푸른역사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">188쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">140*207mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">244g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791156122531</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">13,900원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>언어가 사라진다면 언어가 담고 있는 ‘실재’는 어떻게 될까. 한국역사연구회에서 새롭게 기획한 ‘금요일엔 역사책’의 첫 번째 책인 《한문이 말하지 못한 한국사》는 이 같은 의문에 대한 답을 찾기 위해 과거 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사는 어떻게 진보하고 왜 퇴보하는가</h2>
+        <p class="book-original-title">Age of Revolutions: Progress and Backlash from 1600 to the Present</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/37276/86/cover500/k002031326_2.jpg" alt="역사는 어떻게 진보하고 왜 퇴보하는가 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">파리드 자카리아</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김종수</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">부키</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2025</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">600쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">143*217mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">780g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193528860</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">38,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>가히 혁명적 시대이다. 기술, 정보, 세계화, 정체성이 모두 흔들리고 빠르게 변화하는 가운데 세계는 극심하게 대립하고 분열하는 중이다. 역사는 과연 진보하는가, 아니면 혼란 속에 퇴보하고 있는 것인가? 모두가 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사의 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/14944/52/cover500/8971998555_3.jpg" alt="역사의 역사 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">유시민</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">돌베개</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">340쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">583g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788971998557</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">16,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>&lt;거꾸로 읽는 세계사&gt; 작가 유시민의 신작. 고대로부터 최근까지 역사를 사로잡은 18권의 역사서들을 9장으로 나누어 훑으며 ‘역사’라는 화두를 전개해간다. 서문과 프롤로그에서 역사 탐사의 계획을 소개한...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사란 무엇인가</h2>
+        <p class="book-original-title">What Is History? (1961년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/5488/28/cover500/8972915815_1.jpg" alt="역사란 무엇인가 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">에드워드 H. 카</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김택현</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">까치</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2015</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">264쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">480g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788972915812</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">12,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>E. H. 카의 &lt;역사란 무엇인가&gt; 독점계약 번역 개정판. 이 책을 이해하는 데 핵심이 되는 E. H. 카의 제2판 서문과 R. W. 데이비스의 논문이 수록되었다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">이야기 프랑스사 (보급판)</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/25007/20/cover500/893681169x_1.jpg" alt="이야기 프랑스사 (보급판) 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤선자</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">청아출판사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2020</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">392쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">549g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936811693</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">10,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>선사 시대부터 20세기 프랑스까지 프랑스 역사의 다양한 모습을 체계적으로 두루 다룬 개설서. 각 장에 소개된 사회, 경제, 정치, 종교, 사상과 문화 등의 분야를 고루 다루어 각 시대의 다양한 모습을 묘사했으며, ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">요즘 어른을 위한 최소한의 세계사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/32447/45/cover500/k152935296_2.jpg" alt="요즘 어른을 위한 최소한의 세계사 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">임소미</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">빅피시</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">348쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">145*220mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">452g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193128428</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">18,800원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>러시아는 왜 우크라이나와 전쟁을 벌이는 걸까? 미국은 언제부터 전 세계를 호령하는 강대국이 되었을까? 《요즘 어른을 위한 최소한의 세계사》는 오늘날 꼭 알아야 할 세계사의 주요 사건을 핵심만 쏙쏙 정리했다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 교회 예배 이야기</h2>
+        <p class="book-original-title">Going to Church in the First Century (1980년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11187/42/cover500/8932814821_1.jpg" alt="1세기 교회 예배 이야기 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2017</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">80쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">130*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">141g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932814827</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>단순한 초대교회 및 가정교회 안내서가 아니다. 교회의 본질이 역동적으로 드러난 살아 있는 교회의 모습을 통해 교회의 새로운 가능성을 열어 주는 책이다. 얼마 안 되는 분량에도 불구하고, 교회가 담아야 할 매우...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 그리스도인의 하루 이야기</h2>
+        <p class="book-original-title">A Day in the Life of an Early Christian: A Personal Record</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/17014/27/cover500/s232834099_1.jpg" alt="1세기 그리스도인의 하루 이야기 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2021</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">72쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">134*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">94g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932816470</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>1세기 기독교 시리즈 2탄. 『1세기 교회 예배 이야기』의 속편으로 ‘예배-일상-선교’로 이어지는 1세기 기독교 시리즈의 두 번째 책이다. 탁월한 이야기꾼이자 저명한 신약학자인 저자는 초기 그리스도인들이 교회...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">아랍인의 눈으로 본 십자군 전쟁</h2>
+        <p class="book-original-title">Les croisades vues par les Arabes</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/34/54/cover500/8988996240_1.gif" alt="아랍인의 눈으로 본 십자군 전쟁 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">아민 말루프</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김미선</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">아침이슬</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2002</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">406쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">568g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788988996249</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">15,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>레바논 출신으로 공쿠르상을 수상한 작가 아민 말루프는 오직 십자군 전쟁 시기의 아랍쪽 사료에 근거하여 200년간의 십자군 전쟁을 한 편의 다큐멘터리로 엮어 냈다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">혁명의 시대와 그리스도교</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11380/18/cover500/8936503553_1.jpg" alt="혁명의 시대와 그리스도교 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤영휘</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">홍성사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">372쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">148*200mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">490g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936503550</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">23,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>홍성사에서 3년 프로젝트로 진행되고 있는 홍성강좌의 두 번째 강좌 서양 근대교회사 - 혁명의 시대와 그리스도교가 단행본으로 출간되었다. 격변의 시기에 그리스도교가 세속 사회의 도전에 대응하고 스스로를 변화...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">20세기 우리 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/444/42/cover500/8936482467_1.jpg" alt="20세기 우리 역사 표지">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">강만길</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">창비</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2009</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">432쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">172*224mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">715g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936482466</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-price">20,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <div class="footer">
+            생성일: 2025년 11월 4일 오후 10:07
+        </div>
+    </div>
 </body>
 </html>
