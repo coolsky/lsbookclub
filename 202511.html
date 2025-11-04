@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 목록 - 2025년 11월 4일 오후 10:38</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .container { 
+            max-width: 56rem; 
+            margin: 0 auto; 
+        }
+        .space-y-6 > * + * { 
+            margin-top: 1.5rem; 
+        }
+        .book-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .book-header {
+            background: linear-gradient(to right, #f97316, #f59e0b);
+            padding: 1rem;
+            color: white;
+        }
+        .book-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        .book-subtitle {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+        }
+        .book-original-title {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            opacity: 0.75;
+            font-style: italic;
+        }
+        .book-content {
+            padding: 1rem;
+        }
+        .book-layout {
+            display: flex;
+            gap: 1rem;
+        }
+        .book-cover-container {
+            flex-shrink: 0;
+        }
+        .book-cover {
+            width: 8rem;
+            height: 11rem;
+            background-color: #f3f4f6;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e5e7eb;
+        }
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .book-cover-placeholder {
+            padding: 1rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            word-break: keep-all;
+        }
+        .book-cover-icon {
+            width: 3rem;
+            height: 3rem;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+        .book-details {
+            flex: 1;
+        }
+        .book-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .book-info-item {
+            font-size: 0.875rem;
+        }
+        .book-info-label {
+            color: #6b7280;
+        }
+        .book-info-value {
+            color: #1f2937;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .book-description {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .book-description p {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.625;
+            white-space: pre-line;
+        }
+        .footer {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        @media print {
+            body { background: white !important; }
+            .book-card { page-break-after: always; }
+        }
+        
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .book-layout { flex-direction: column; }
+            .book-cover-container { margin: 0 auto; }
+            .book-title { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 안내 메시지 -->
+        <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0.5rem;">
+            <p style="font-size: 0.875rem; color: #1e40af; margin: 0;">
+                <strong>📱 안내:</strong> 카카오톡이나 일부 앱에서는 외부 이미지가 차단될 수 있습니다. 이미지가 보이지 않으면 일반 브라우저(크롬, 사파리 등)로 열어주세요.
+            </p>
+        </div>
+        <div class="space-y-6">
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">한문이 말하지 못한 한국사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/31937/35/cover500/k482833055_1.jpg" alt="한문이 말하지 못한 한국사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>한문이 말하지 못한 한국사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">장지연</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">푸른역사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">188쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">140*207mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">244g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791156122531</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">13,900원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>언어가 사라진다면 언어가 담고 있는 ‘실재’는 어떻게 될까. 한국역사연구회에서 새롭게 기획한 ‘금요일엔 역사책’의 첫 번째 책인 《한문이 말하지 못한 한국사》는 이 같은 의문에 대한 답을 찾기 위해 과거 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사는 어떻게 진보하고 왜 퇴보하는가</h2>
+        <p class="book-original-title">Age of Revolutions: Progress and Backlash from 1600 to the Present</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/37276/86/cover500/k002031326_2.jpg" alt="역사는 어떻게 진보하고 왜 퇴보하는가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사는 어떻게 진보하고 왜 퇴보하는가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">파리드 자카리아</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김종수</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">부키</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2025</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">600쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">143*217mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">780g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193528860</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">38,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>가히 혁명적 시대이다. 기술, 정보, 세계화, 정체성이 모두 흔들리고 빠르게 변화하는 가운데 세계는 극심하게 대립하고 분열하는 중이다. 역사는 과연 진보하는가, 아니면 혼란 속에 퇴보하고 있는 것인가? 모두가 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사의 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/14944/52/cover500/8971998555_3.jpg" alt="역사의 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사의 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">유시민</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">돌베개</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">340쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">583g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788971998557</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">16,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>&lt;거꾸로 읽는 세계사&gt; 작가 유시민의 신작. 고대로부터 최근까지 역사를 사로잡은 18권의 역사서들을 9장으로 나누어 훑으며 ‘역사’라는 화두를 전개해간다. 서문과 프롤로그에서 역사 탐사의 계획을 소개한...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사란 무엇인가</h2>
+        <p class="book-original-title">What Is History? (1961년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/5488/28/cover500/8972915815_1.jpg" alt="역사란 무엇인가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사란 무엇인가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">에드워드 H. 카</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김택현</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">까치</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2015</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">264쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">480g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788972915812</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">12,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>E. H. 카의 &lt;역사란 무엇인가&gt; 독점계약 번역 개정판. 이 책을 이해하는 데 핵심이 되는 E. H. 카의 제2판 서문과 R. W. 데이비스의 논문이 수록되었다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">이야기 프랑스사 (보급판)</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/25007/20/cover500/893681169x_1.jpg" alt="이야기 프랑스사 (보급판) 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>이야기 프랑스사 (보급판)</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤선자</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">청아출판사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2020</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">392쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">549g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936811693</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">10,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>선사 시대부터 20세기 프랑스까지 프랑스 역사의 다양한 모습을 체계적으로 두루 다룬 개설서. 각 장에 소개된 사회, 경제, 정치, 종교, 사상과 문화 등의 분야를 고루 다루어 각 시대의 다양한 모습을 묘사했으며, ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">요즘 어른을 위한 최소한의 세계사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/32447/45/cover500/k152935296_2.jpg" alt="요즘 어른을 위한 최소한의 세계사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>요즘 어른을 위한 최소한의 세계사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">임소미</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">빅피시</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">348쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">145*220mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">452g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193128428</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">18,800원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>러시아는 왜 우크라이나와 전쟁을 벌이는 걸까? 미국은 언제부터 전 세계를 호령하는 강대국이 되었을까? 《요즘 어른을 위한 최소한의 세계사》는 오늘날 꼭 알아야 할 세계사의 주요 사건을 핵심만 쏙쏙 정리했다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 교회 예배 이야기</h2>
+        <p class="book-original-title">Going to Church in the First Century (1980년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11187/42/cover500/8932814821_1.jpg" alt="1세기 교회 예배 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 교회 예배 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2017</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">80쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">130*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">141g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932814827</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>단순한 초대교회 및 가정교회 안내서가 아니다. 교회의 본질이 역동적으로 드러난 살아 있는 교회의 모습을 통해 교회의 새로운 가능성을 열어 주는 책이다. 얼마 안 되는 분량에도 불구하고, 교회가 담아야 할 매우...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 그리스도인의 하루 이야기</h2>
+        <p class="book-original-title">A Day in the Life of an Early Christian: A Personal Record</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/17014/27/cover500/s232834099_1.jpg" alt="1세기 그리스도인의 하루 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 그리스도인의 하루 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2021</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">72쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">134*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">94g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932816470</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>1세기 기독교 시리즈 2탄. 『1세기 교회 예배 이야기』의 속편으로 ‘예배-일상-선교’로 이어지는 1세기 기독교 시리즈의 두 번째 책이다. 탁월한 이야기꾼이자 저명한 신약학자인 저자는 초기 그리스도인들이 교회...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">아랍인의 눈으로 본 십자군 전쟁</h2>
+        <p class="book-original-title">Les croisades vues par les Arabes</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/34/54/cover500/8988996240_1.gif" alt="아랍인의 눈으로 본 십자군 전쟁 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>아랍인의 눈으로 본 십자군 전쟁</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">아민 말루프</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김미선</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">아침이슬</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2002</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">406쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">568g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788988996249</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">15,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>레바논 출신으로 공쿠르상을 수상한 작가 아민 말루프는 오직 십자군 전쟁 시기의 아랍쪽 사료에 근거하여 200년간의 십자군 전쟁을 한 편의 다큐멘터리로 엮어 냈다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">혁명의 시대와 그리스도교</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11380/18/cover500/8936503553_1.jpg" alt="혁명의 시대와 그리스도교 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>혁명의 시대와 그리스도교</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤영휘</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">홍성사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">372쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">148*200mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">490g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936503550</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">23,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>홍성사에서 3년 프로젝트로 진행되고 있는 홍성강좌의 두 번째 강좌 서양 근대교회사 - 혁명의 시대와 그리스도교가 단행본으로 출간되었다. 격변의 시기에 그리스도교가 세속 사회의 도전에 대응하고 스스로를 변화...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">20세기 우리 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/444/42/cover500/8936482467_1.jpg" alt="20세기 우리 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>20세기 우리 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">강만길</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">창비</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2009</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">432쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">172*224mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">715g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936482466</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">20,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">한문이 말하지 못한 한국사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/31937/35/cover500/k482833055_1.jpg" alt="한문이 말하지 못한 한국사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>한문이 말하지 못한 한국사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">장지연</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">푸른역사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">188쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">140*207mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">244g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791156122531</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">13,900원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>언어가 사라진다면 언어가 담고 있는 ‘실재’는 어떻게 될까. 한국역사연구회에서 새롭게 기획한 ‘금요일엔 역사책’의 첫 번째 책인 《한문이 말하지 못한 한국사》는 이 같은 의문에 대한 답을 찾기 위해 과거 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사는 어떻게 진보하고 왜 퇴보하는가</h2>
+        <p class="book-original-title">Age of Revolutions: Progress and Backlash from 1600 to the Present</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/37276/86/cover500/k002031326_2.jpg" alt="역사는 어떻게 진보하고 왜 퇴보하는가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사는 어떻게 진보하고 왜 퇴보하는가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">파리드 자카리아</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김종수</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">부키</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2025</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">600쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">143*217mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">780g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193528860</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">38,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>가히 혁명적 시대이다. 기술, 정보, 세계화, 정체성이 모두 흔들리고 빠르게 변화하는 가운데 세계는 극심하게 대립하고 분열하는 중이다. 역사는 과연 진보하는가, 아니면 혼란 속에 퇴보하고 있는 것인가? 모두가 ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사의 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/14944/52/cover500/8971998555_3.jpg" alt="역사의 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사의 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">유시민</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">돌베개</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">340쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">583g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788971998557</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">16,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>&lt;거꾸로 읽는 세계사&gt; 작가 유시민의 신작. 고대로부터 최근까지 역사를 사로잡은 18권의 역사서들을 9장으로 나누어 훑으며 ‘역사’라는 화두를 전개해간다. 서문과 프롤로그에서 역사 탐사의 계획을 소개한...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">역사란 무엇인가</h2>
+        <p class="book-original-title">What Is History? (1961년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/5488/28/cover500/8972915815_1.jpg" alt="역사란 무엇인가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사란 무엇인가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">에드워드 H. 카</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김택현</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">까치</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2015</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">264쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">480g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788972915812</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">12,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>E. H. 카의 &lt;역사란 무엇인가&gt; 독점계약 번역 개정판. 이 책을 이해하는 데 핵심이 되는 E. H. 카의 제2판 서문과 R. W. 데이비스의 논문이 수록되었다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">이야기 프랑스사 (보급판)</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/25007/20/cover500/893681169x_1.jpg" alt="이야기 프랑스사 (보급판) 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>이야기 프랑스사 (보급판)</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤선자</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">청아출판사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2020</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">392쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">549g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936811693</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">10,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>선사 시대부터 20세기 프랑스까지 프랑스 역사의 다양한 모습을 체계적으로 두루 다룬 개설서. 각 장에 소개된 사회, 경제, 정치, 종교, 사상과 문화 등의 분야를 고루 다루어 각 시대의 다양한 모습을 묘사했으며, ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">요즘 어른을 위한 최소한의 세계사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/32447/45/cover500/k152935296_2.jpg" alt="요즘 어른을 위한 최소한의 세계사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>요즘 어른을 위한 최소한의 세계사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">임소미</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">빅피시</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">348쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">145*220mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">452g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193128428</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">18,800원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>러시아는 왜 우크라이나와 전쟁을 벌이는 걸까? 미국은 언제부터 전 세계를 호령하는 강대국이 되었을까? 《요즘 어른을 위한 최소한의 세계사》는 오늘날 꼭 알아야 할 세계사의 주요 사건을 핵심만 쏙쏙 정리했다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 교회 예배 이야기</h2>
+        <p class="book-original-title">Going to Church in the First Century (1980년)</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11187/42/cover500/8932814821_1.jpg" alt="1세기 교회 예배 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 교회 예배 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2017</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">80쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">130*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">141g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932814827</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>단순한 초대교회 및 가정교회 안내서가 아니다. 교회의 본질이 역동적으로 드러난 살아 있는 교회의 모습을 통해 교회의 새로운 가능성을 열어 주는 책이다. 얼마 안 되는 분량에도 불구하고, 교회가 담아야 할 매우...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">1세기 그리스도인의 하루 이야기</h2>
+        <p class="book-original-title">A Day in the Life of an Early Christian: A Personal Record</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/17014/27/cover500/s232834099_1.jpg" alt="1세기 그리스도인의 하루 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 그리스도인의 하루 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2021</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">72쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">134*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">94g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932816470</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>1세기 기독교 시리즈 2탄. 『1세기 교회 예배 이야기』의 속편으로 ‘예배-일상-선교’로 이어지는 1세기 기독교 시리즈의 두 번째 책이다. 탁월한 이야기꾼이자 저명한 신약학자인 저자는 초기 그리스도인들이 교회...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">아랍인의 눈으로 본 십자군 전쟁</h2>
+        <p class="book-original-title">Les croisades vues par les Arabes</p>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/34/54/cover500/8988996240_1.gif" alt="아랍인의 눈으로 본 십자군 전쟁 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>아랍인의 눈으로 본 십자군 전쟁</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">아민 말루프</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김미선</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">아침이슬</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2002</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">406쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">568g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788988996249</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">15,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>레바논 출신으로 공쿠르상을 수상한 작가 아민 말루프는 오직 십자군 전쟁 시기의 아랍쪽 사료에 근거하여 200년간의 십자군 전쟁을 한 편의 다큐멘터리로 엮어 냈다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">혁명의 시대와 그리스도교</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11380/18/cover500/8936503553_1.jpg" alt="혁명의 시대와 그리스도교 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>혁명의 시대와 그리스도교</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤영휘</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">홍성사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">372쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">148*200mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">490g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936503550</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">23,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>홍성사에서 3년 프로젝트로 진행되고 있는 홍성강좌의 두 번째 강좌 서양 근대교회사 - 혁명의 시대와 그리스도교가 단행본으로 출간되었다. 격변의 시기에 그리스도교가 세속 사회의 도전에 대응하고 스스로를 변화...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <h2 class="book-title">20세기 우리 역사</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/444/42/cover500/8936482467_1.jpg" alt="20세기 우리 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>20세기 우리 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">강만길</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">창비</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2009</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">432쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">172*224mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">715g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936482466</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">20,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <div class="footer">
+            생성일: 2025년 11월 4일 오후 10:38
+        </div>
+    </div>
+</body>
+</html>
