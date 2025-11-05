@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 목록 - 2025년 11월 5일 오후 02:03</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .container { 
+            max-width: 56rem; 
+            margin: 0 auto; 
+        }
+        .space-y-6 > * + * { 
+            margin-top: 1.5rem; 
+        }
+        .book-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .book-header {
+            background: linear-gradient(to right, #f97316, #f59e0b);
+            padding: 1rem;
+            color: white;
+        }
+        .book-header-flex {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        .book-header-content {
+            flex: 1;
+        }
+        .book-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        .book-subtitle {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+        }
+        .book-original-title {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            opacity: 0.75;
+            font-style: italic;
+        }
+        .store-link {
+            flex-shrink: 0;
+            background-color: white;
+            color: #f97316;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s;
+        }
+        .store-link:hover {
+            background-color: #fff7ed;
+        }
+        .book-content {
+            padding: 1rem;
+        }
+        .book-layout {
+            display: flex;
+            gap: 1rem;
+        }
+        .book-cover-container {
+            flex-shrink: 0;
+        }
+        .book-cover {
+            width: 8rem;
+            height: 11rem;
+            background-color: #f3f4f6;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e5e7eb;
+        }
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .book-cover-placeholder {
+            padding: 1rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            word-break: keep-all;
+        }
+        .book-cover-icon {
+            width: 3rem;
+            height: 3rem;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+        .book-details {
+            flex: 1;
+        }
+        .book-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .book-info-item {
+            font-size: 0.875rem;
+        }
+        .book-info-label {
+            color: #6b7280;
+        }
+        .book-info-value {
+            color: #1f2937;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .book-description {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .book-description p {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.625;
+            white-space: pre-line;
+        }
+        .toc-section {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .toc-toggle {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+        .toc-toggle:hover {
+            background-color: #f3f4f6;
+        }
+        .toggle-icon {
+            color: #f97316;
+            font-weight: bold;
+        }
+        .toc-label {
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        .toc-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .toc-content.open {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .toc-text {
+            background-color: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            line-height: 1.625;
+            white-space: pre-line;
+            color: #374151;
+            font-family: monospace;
+            margin-top: 0.5rem;
+        }
+        .footer {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        @media print {
+            body { background: white !important; }
+            .book-card { page-break-after: always; }
+            .store-link { display: none !important; }
+        }
+        
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .book-layout { flex-direction: column; }
+            .book-cover-container { margin: 0 auto; }
+            .book-title { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="space-y-6">
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">한문이 말하지 못한 한국사</h2>
+            </div>
+            <a href="https://naver.me/GGCxYU90" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/31937/35/cover500/k482833055_1.jpg" alt="한문이 말하지 못한 한국사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>한문이 말하지 못한 한국사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">장지연</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">푸른역사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">188쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">140*207mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">244g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791156122531</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">13,900원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>언어가 사라진다면 언어가 담고 있는 ‘실재’는 어떻게 될까. 한국역사연구회에서 새롭게 기획한 ‘금요일엔 역사책’의 첫 번째 책인 《한문이 말하지 못한 한국사》는 이 같은 의문에 대한 답을 찾기 위해 과거 ...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">들어가며
+비린내, 누린내, 풋내, 군내
+인류가 언제부터 그렇게 문자를 사용해 왔다고?
+
+01_다른 문자가 보여 주는 다른 세계
+사라졌을지도 모를 고유 지식
+《한경지략》과 〈한양가〉의 서로 다른 한양
+서울, 그리고 서울을 부르는 수많은 한자어
+
+02_이두․향찰의 시대에서 한문의 시대로
+1,400년이나 쓰인 이두․향찰․구결
+향가와 한시, 나란히 걸리다
+의천과 김부식이 못마땅해한 차자 시스템
+고려, 몽골에 한문 문화를 전하다
+
+03_한글의 시작, 예상 외의 성공
+훈민정음은 갑자기 튀어나온 것인가
+급속도로 늘어난 ‘배운 사람들’
+사투리까지 담아낸 훈민정음
+폰트와 필기구, 활자와 기술 그 너머의 이야기
+
+04_언문이 열어 준 조선 사회의 틈새
+정조의 뒤쥭박쥭, 양반 남성도 한글 썼다
+여성, 불멸을 꿈꾸며 소리치다
+언문, 가족의 일상과 관계를 바꾸다
+변경에서 성장하는 새로운 독서
+
+나오며
+참고자료
+찾아보기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">역사는 어떻게 진보하고 왜 퇴보하는가</h2>
+                <p class="book-original-title">Age of Revolutions: Progress and Backlash from 1600 to the Present</p>
+            </div>
+            <a href="https://naver.me/GPlIndXC" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/37276/86/cover500/k002031326_2.jpg" alt="역사는 어떻게 진보하고 왜 퇴보하는가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사는 어떻게 진보하고 왜 퇴보하는가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">파리드 자카리아</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김종수</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">부키</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2025</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">600쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">143*217mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">780g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193528860</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">38,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>가히 혁명적 시대이다. 기술, 정보, 세계화, 정체성이 모두 흔들리고 빠르게 변화하는 가운데 세계는 극심하게 대립하고 분열하는 중이다. 역사는 과연 진보하는가, 아니면 혼란 속에 퇴보하고 있는 것인가? 모두가 ...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">들어가는 말 · 다양한 형태의 혁명들
+혁명이라는 말의 기원 | 국제 정치의 근본적 재편 | 변화와 그에 따른 불만 | 좌파와 우파의 기원
+
+| 1부 | 무엇이 한 시대를 혁명적으로 만들었는가
+
+1 최초의 자유주의 혁명, 네덜란드
+허접한 상인 공화국, 베네치아 | 최초의 세계화 주역, 스페인과 포르투갈 | 네덜란드는 네덜란드인이 창조했다 | 종교개혁의 역할 | 세계 최초의 자유주의 혁명 | 해군력으로 이룬 팍스 홀랜디카 | 가장 위대한 보물, 금융 시스템 | 파괴적 혁신의 혜택 | 분권화된 최초의 근대적 공화국 | 자유주의 사상에 대한 반발과 역풍 | 영국에서 기사회생한 자유주의
+2 온건했으나 진정으로 혁명적인 명예혁명, 영국
+평등주의적인 영국의 정치 구조 | 근대화를 이끈 경제 구조 | 개혁에서 혁명으로 | 돌아온 절대주의 | 정체성 정치와 초당적 협력 | 몰락의 함정에 빠진 네덜란드 | 자본주의의 세계적 확산 | 낙관주의자들의 휘그 사관
+3 분열과 혼란을 남긴 혁명, 프랑스
+잘못 꼬여 버린 혁명 | 급진주의의 대두 | 비운의 자유주의자 라파예트 | 극단적 포퓰리스트 로베스피에르 | 독재자이자 황제 나폴레옹 | 오래된 술병에 담긴 새 포도주 | 자유라고 불리는 고독 | 군사화된 민족주의의 위험 | 실패로 끝난 국가 통제주의 | 프랑스 혁명의 폭력적 유산 | 화산처럼 일어난 잇따른 혁명 | 프랑스 혁명을 삼킨 영국의 산업 혁명
+4 혁명의 모태이자 전 세계를 근대화한 산업 혁명
+기술 혁신이 이룬 일상생활의 변화 | 여가의 발명 | 산업화로 촉발된 여성 해방 | 음울한 사탄의 공장 | 러다이트와 자유주의자 | 혁명을 막기 위한 개혁 | 배가 부르면 혁명도 없다 | 자유방임적 좌파, 반시장적 우파 | 곡물법으로 인한 정당의 분열 | 수정궁인가, 원형감옥인가 | 새로운 정치, 오래된 상처 | 대영 제국의 승리
+5 미국의 산업화로 이룬 변화, 미국 혁명
+미국은 어떻게 산업화되었나 | 미국의 극적인 변신 | 사회주의가 설 자리는 없었다 | 새로운 정체성, 새로운 정치 | 인류를 금 십자가에 못박지 말라 | 1896년의 정치 구도 재편 | 마지막 진보적 공화당원 | 현대 미국의 탄생
+
+| 2부 | 혁명적 힘과 반발이 불러온 현대의 혁명
+
+6 불평등과 상대적 박탈감의 심화, 세계화 혁명
+세계화의 본격화 | 거리의 한계를 극복하다 | 국제주의의 탄생 | 무역 전쟁과 무력 전쟁 | 세계화의 종말과 관세 | 재탄생한 세계화와 새로운 경제 질서 | 교통 기술 혁명, 제트기의 시대 | 경기 침체에 대한 신자유주의 개혁 | 초고속으로 치달은 세계화 | 세계화에 대한 불만의 기원 | 차이나 쇼크인가, 세계화 쇼크인가 | 충격에 대한 이해 | 1990년대 경제 호황의 파산 | 세계화에 대한 급격한 기류 변화
+7 모두가 고독한 왕이 된 세상, 정보 혁명
+〈젯슨 가족〉은 틀렸다 | 모든 사람을 왕으로 만든 세상 | 나 홀로 볼링하기 | '어떤 곳'인가, '아무 곳'인가 | 세상의 절반은 어떻게 사는가 | 새로운 인쇄기, 소셜 미디어 | 오래된 부족주의, 새로운 네트워크 | 로봇이 (아직은) 일자리를 빼앗지 않는 이유 | 생명공학의 혁명 | 디스토피아를 넘어서
+8 두려움과 불안이 이끈 정체성 혁명
+사회적 욕구의 단계 이론 | 좌파의 분열 | 미국의 반체제 문화 운동 | 유럽의 거센 세속화 물결 | 사회 변화와 침묵하는 다수 | 이름 없는 문제, 페미니즘 운동 | 새로운 대각성 운동 | 떠오르는 제3의 길 | 불안정한 중도 노선 | 유럽의 티핑 포인트 | 문화적 분열 | 미국의 정치적 부족주의 | 사회 불안의 상징 이민 문제 | 신은 죽었고 우리가 그를 죽였다 | 극단적 변화가 두려운 보수 | 문화 전쟁이 만든 기묘한 동맹
+9 지정학적 긴장과 상호 의존성 사이, 지정학적 이중 혁명
+팍스 아메리카나의 기원 | 주변부 국가의 부상 | 중국의 부상과 야망 | 질서를 깨뜨리려는 훼방꾼 러시아 | 너무 강하거나 너무 약하거나 | 위험에 처한 독재 정권 | 서구의 사상적 패권에 대한 두려움 | 자유롭지도, 국제적이지도, 질서정연하지도 | 국내외의 반자유주의적 민주주의
+맺음말 · 풍요와 자유의 대가, 고독과 상실감의 시대
+격변의 시대, 어떻게 할 것인가 | 자유에 대한 믿음</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">역사의 역사</h2>
+            </div>
+            <a href="https://naver.me/x3H9WH6i" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/14944/52/cover500/8971998555_3.jpg" alt="역사의 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사의 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">유시민</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">돌베개</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">340쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">583g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788971998557</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">16,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>&lt;거꾸로 읽는 세계사&gt; 작가 유시민의 신작. 고대로부터 최근까지 역사를 사로잡은 18권의 역사서들을 9장으로 나누어 훑으며 ‘역사’라는 화두를 전개해간다. 서문과 프롤로그에서 역사 탐사의 계획을 소개한...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">서문 ― 역사란 무엇인가?
+프롤로그 ― 기록, 과학, 문학
+
+제1장 서구 역사의 창시자, 헤로도토스와 투키디데스
+거리의 이야기꾼, 헤로도토스 | 페르시아 전쟁과 『역사』 | 펠로폰네소스 전쟁과 그리스 세계의 몰락 | 세계사와 민족사의 동시 탄생 | 사실과 상상력 | 서사의 힘과 역사의 매력
+
+제2장 사마천이 그린 인간과 권력과 시대의 풍경화
+역사가의 우아한 복수 | 기전체로 그린 시대의 풍경 | 사료의 공백과 문학적 상상력 | 역사의 코스모스
+
+제3장 이븐 할둔, 최초의 인류사를 쓰다
+과학과 역사의 첫 만남 | 『성찰의 책』과 『역사서설』 | 왕조의 흥망과 ‘아싸비야’ 이론 | 역사가와 종교의 속박 | 왕이 된 예수 | 이슬람 세계의 통합과 분열 | 군주에게 준 경고
+
+제4장 ‘있었던 그대로의 역사’, 랑케
+타고난 역사가
+전문 역사학자의 시대 | ‘문서고 깨기’의 달인 | 역사와 신학 | ‘있었던 그대로’의 생명력 없는 역사
+
+제5장 역사를 비껴간 마르크스의 역사법칙
+해석에서 변혁으로 | 유물론, 변증법, 유물사관 | 공산주의 혁명과 역사의 종말 | 후쿠야마의 변종 역사종말론
+
+제6장 민족주의 역사학의 고단한 역정, 박은식.신채호.백남운
+제국주의 시대의 민족주의 역사학 | 박은식의 『한국통사』 | 개명 유학자에서 민주주의자로 | 아와 비아의 투쟁의 기록, 『조선상고사』 | 걸출한 사료 연구자, 신채호 | 김부식의 역사 왜곡 | 백남운의 조선 역사 4단계 발전론 | 식민사관과 유물사관
+
+제7장 에드워드 H. 카의 역사가 된 역사 이론서
+『역사란 무엇인가』가 난해한 이유 | 역사가와 사실 | 모든 역사는 현대사 | 개인과 사회, 역사의 진보
+
+제8장 문명의 역사, 슈펭글러.토인비.헌팅턴
+슈펭글러의 『서구의 몰락』 | 『역사의 연구』, 문명의 백과사전 | 도전과 응전의 기록 | 창조적 소수자와 내적·외적 프롤레타리아트 | 문명의 충돌 | 단층선 분쟁
+
+제9장 다이아몬드와 하라리, 역사와 과학을 통합하다
+부족 인간에서 사피엔스로 | 과학자가 쓴 역사 | 인지혁명과 역사의 탄생 | ‘역사의 최대 사기’ 농업혁명 | 신이 되려는 인간
+
+에필로그 ― 서사의 힘
+참고문헌
+찾아보기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">역사란 무엇인가</h2>
+                <p class="book-original-title">What Is History? (1961년)</p>
+            </div>
+            <a href="https://naver.me/xOdY2N3K" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/5488/28/cover500/8972915815_1.jpg" alt="역사란 무엇인가 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>역사란 무엇인가</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">에드워드 H. 카</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김택현</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">까치</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2015</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">264쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">480g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788972915812</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">12,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>E. H. 카의 &lt;역사란 무엇인가&gt; 독점계약 번역 개정판. 이 책을 이해하는 데 핵심이 되는 E. H. 카의 제2판 서문과 R. W. 데이비스의 논문이 수록되었다.</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">편집자 노트
+제2판 서문
+
+1 역사가와 그의 사실들
+2 사회와 개인
+3 역사, 과학 그리고 도덕
+4 역사에서의 인과관계
+5 진보로서의 역사
+6 지평선의 확대
+
+부록 E. H. 카의 자료철에서 :
+『역사란 무엇인가』 제2판을 위한 노트
+개역판 역자 후기
+초판 역자 후기
+인명, 서명 색인</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">이야기 프랑스사 (보급판)</h2>
+            </div>
+            <a href="https://naver.me/Ig4zgOcl" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/25007/20/cover500/893681169x_1.jpg" alt="이야기 프랑스사 (보급판) 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>이야기 프랑스사 (보급판)</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤선자</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">청아출판사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2020</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">392쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">549g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936811693</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">10,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>선사 시대부터 20세기 프랑스까지 프랑스 역사의 다양한 모습을 체계적으로 두루 다룬 개설서. 각 장에 소개된 사회, 경제, 정치, 종교, 사상과 문화 등의 분야를 고루 다루어 각 시대의 다양한 모습을 묘사했으며, ...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">1. 켈트족과 로마인
+2. 중세의 형성
+3. 중세의 발전
+4. 중세의 황혼
+5. 새로운 시대의 시작
+6. 이성의 시대
+7. 프랑스 대혁명과 나폴레옹 제국
+8. 공화제를 향한 시련들
+9. 세계대전과 오늘날의 프랑스</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">요즘 어른을 위한 최소한의 세계사</h2>
+            </div>
+            <a href="https://naver.me/xYvexqwb" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/32447/45/cover500/k152935296_2.jpg" alt="요즘 어른을 위한 최소한의 세계사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>요즘 어른을 위한 최소한의 세계사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">임소미</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">빅피시</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2023</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">348쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">145*220mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">452g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9791193128428</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">18,800원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>러시아는 왜 우크라이나와 전쟁을 벌이는 걸까? 미국은 언제부터 전 세계를 호령하는 강대국이 되었을까? 《요즘 어른을 위한 최소한의 세계사》는 오늘날 꼭 알아야 할 세계사의 주요 사건을 핵심만 쏙쏙 정리했다.</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">프롤로그｜더 나은 삶을 살기 위한 최소한의 역사 교양
+
+PART 01 인류 문명의 탄생, 고대사
+아스테카문명｜비밀에 싸인 고대 문명이 하루아침에 멸망한 이유
+이집트문명｜나일강의 비옥한 토지를 차지하기 위한 전쟁의 역사
+황하문명｜천하 패권을 차지하기 위한 중국의 역사
+
+PART 02 역사를 바꾼 결정적인 순간, 전쟁사
+제1차 세계대전｜제국주의의 탐욕이 낳은 20세기 최초의 대규모 전쟁
+제2차 세계대전｜한 사람의 광기가 부른 비극적인 전쟁
+태평양전쟁｜일본의 야욕이 불러일으킨 미국과의 한판승부
+베트남전쟁｜미국은 왜 동남아 신생국에 패배했을까?
+중동전쟁｜피로 물든 신들의 땅은 언제쯤 평화를 찾을 수 있을까?
+
+PART 03 대제국 흥망의 역사, 최강국 통사
+오스만제국｜동서양 문명을 잇는 제국의 탄생
+스페인｜유럽과 이슬람의 경계, 이베리아반도를 둘러싼 패권 전쟁
+영국｜미지의 섬 브리튼이 해가 지지 않는 나라가 되기까지
+러시아와 동슬라브｜왜 러시아는 10년마다 전쟁을 벌일까?
+미국｜영국의 식민지에서 초강대국이 될 수 있었던 이유
+
+PART 04 세상이 숨긴 비극의 역사, 잔혹사
+아이티 혁명｜좀비의 기원이 된 세계 최초 흑인 공화국의 탄생
+아편전쟁｜서양을 깔보던 우물 안 개구리 중국의 추락
+캄보디아 킬링필드｜홀로코스트보다 잔인한 전 국민 4분의 1이 사망한 대학살극
+홍콩 구룡성채｜20세기 최후의 무법지, 거대한 슬럼에서 일어난 일들
+오키나와 류큐 왕국｜이제는 사라진 옛 국가를 찾아서
+
+참고자료</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">1세기 교회 예배 이야기</h2>
+                <p class="book-original-title">Going to Church in the First Century (1980년)</p>
+            </div>
+            <a href="https://naver.me/Fut8OFGG" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11187/42/cover500/8932814821_1.jpg" alt="1세기 교회 예배 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 교회 예배 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2017</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">80쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">130*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">141g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932814827</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>단순한 초대교회 및 가정교회 안내서가 아니다. 교회의 본질이 역동적으로 드러난 살아 있는 교회의 모습을 통해 교회의 새로운 가능성을 열어 주는 책이다. 얼마 안 되는 분량에도 불구하고, 교회가 담아야 할 매우...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">한국어판 서문
+초판 서문
+개정판 서문
+
+내 이름은 푸블리우스
+아굴라와 브리스가 부부와 만나다
+주의 만찬에 참여하다
+친교를 나누다
+벨릭스가 친구 두로를 데려오다
+루시아의 해방에 대해 토론하다
+종교적 격식에 매이지 않은 모임
+놀이하는 모임
+노래 부르기와 대화식 기도
+은사에 대한 아굴라의 가르침
+권면과 서로를 위한 기도 후에 모임을 마치다
+밤길을 나서며
+
+역자 후기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">1세기 그리스도인의 하루 이야기</h2>
+                <p class="book-original-title">A Day in the Life of an Early Christian: A Personal Record</p>
+            </div>
+            <a href="https://naver.me/5owtfqLk" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/17014/27/cover500/s232834099_1.jpg" alt="1세기 그리스도인의 하루 이야기 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>1세기 그리스도인의 하루 이야기</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">로버트 뱅크스</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">신현기</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">IVP</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2021</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">72쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">134*190mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">94g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788932816470</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">7,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>1세기 기독교 시리즈 2탄. 『1세기 교회 예배 이야기』의 속편으로 ‘예배-일상-선교’로 이어지는 1세기 기독교 시리즈의 두 번째 책이다. 탁월한 이야기꾼이자 저명한 신약학자인 저자는 초기 그리스도인들이 교회...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">한국어판 서문
+
+몇 년 뒤 푸블리우스
+우리 가족
+하루 일과를 시작하다
+업무를 개시하다
+아침나절의 광장
+목욕탕에서 만난 사람들
+종과 주인이 함께하는 점심 식사
+학교생활과 자녀 교육
+저녁 식사에 초대받다
+우상에 바친 고기
+로마 화재 사건과 네로
+비즈니스 이야기
+후기
+
+주
+일상을 세우는 책들
+일상어 목록
+역자 후기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">아랍인의 눈으로 본 십자군 전쟁</h2>
+                <p class="book-original-title">Les croisades vues par les Arabes</p>
+            </div>
+            <a href="https://naver.me/5gYWhkbl" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/34/54/cover500/8988996240_1.gif" alt="아랍인의 눈으로 본 십자군 전쟁 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>아랍인의 눈으로 본 십자군 전쟁</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">아민 말루프</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">옮긴이:</span>
+                        <span class="book-info-value">김미선</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">아침이슬</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2002</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">406쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">568g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788988996249</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">15,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>레바논 출신으로 공쿠르상을 수상한 작가 아민 말루프는 오직 십자군 전쟁 시기의 아랍쪽 사료에 근거하여 200년간의 십자군 전쟁을 한 편의 다큐멘터리로 엮어 냈다.</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">-추천의 글
+-머리말
+
+프롤로그
+
+1부 침략
+
+1장 프랑크인들 들이닥치다
+2장 저주받을 갑옷 제조인
+3장 마라의 식인종
+
+2부 정복
+
+4장 트리폴리스의 2천 일
+5장 암살단 아사신
+
+3부 반격
+
+6장 다마스쿠스의 음모
+7장 에미르의 눈에 비친 야만인들
+
+4부 승리
+
+8장 성왕 누르 알 딘
+9장 살라딘의 등장
+10장 관대한 군주
+
+5부 유예
+
+11장 살라딘과 리처드
+12장 예루살렘의 운명
+
+6부 추방
+
+13장 몽골인의 채찍
+14장 신이여 다시는 그들이 이 땅에 발을 들이지 못하게 하옵소서
+
+에필로그
+
+-용어설명
+-주석과 출처
+-연표
+-지도
+-옮긴이 글
+-인명 색인
+-지명 색인</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">혁명의 시대와 그리스도교</h2>
+            </div>
+            <a href="https://naver.me/GhSj3Ajo" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/11380/18/cover500/8936503553_1.jpg" alt="혁명의 시대와 그리스도교 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>혁명의 시대와 그리스도교</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">윤영휘</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">홍성사</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2018</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">372쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">148*200mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">490g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936503550</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">23,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>홍성사에서 3년 프로젝트로 진행되고 있는 홍성강좌의 두 번째 강좌 서양 근대교회사 - 혁명의 시대와 그리스도교가 단행본으로 출간되었다. 격변의 시기에 그리스도교가 세속 사회의 도전에 대응하고 스스로를 변화...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">기획 취지문
+머리말
+
+1장 종교개혁 이후 18세기까지
+2장 과학혁명과 계몽주의
+3장 대각성 운동과 대서양 복음주의 네트워크의 형성
+4장 미국 독립혁명과 정교분리 사회
+5장 영국 노예무역 폐지 운동
+6장 프랑스혁명과 탈그리스도교 사회
+7장 19세기 프로테스탄트 신학과 교회의 변화
+8장 세속화, 그리스도교, 학문(과학, 역사)
+9장 종교 생활의 변화: 여성, 청소년, 노동자
+10장 근대국가와 그리스도교: 독일, 이탈리아의 통일
+11장 선교와 그리스도교의 팽창
+12장 20세기를 향하여: 선교, 제국, 문명
+
+참고문헌</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="book-card">
+    <div class="book-header">
+        <div class="book-header-flex">
+            <div class="book-header-content">
+                <h2 class="book-title">20세기 우리 역사</h2>
+            </div>
+            <a href="https://naver.me/GIG4iRx6" target="_blank" rel="noopener noreferrer" class="store-link">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                구매하기
+            </a>
+        </div>
+    </div>
+    <div class="book-content">
+        <div class="book-layout">
+            <div class="book-cover-container">
+                <div class="book-cover">
+                    <img src="https://image.aladin.co.kr/product/444/42/cover500/8936482467_1.jpg" alt="20세기 우리 역사 표지" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'book-cover-placeholder\'><svg class=\'book-cover-icon\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\'></path></svg><div>20세기 우리 역사</div></div>';">
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-info-list">
+                    <div class="book-info-item">
+                        <span class="book-info-label">저자:</span>
+                        <span class="book-info-value">강만길</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판사:</span>
+                        <span class="book-info-value">창비</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">출판일:</span>
+                        <span class="book-info-value">2009</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">페이지:</span>
+                        <span class="book-info-value">432쪽</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">크기:</span>
+                        <span class="book-info-value">172*224mm</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">무게:</span>
+                        <span class="book-info-value">715g</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">ISBN:</span>
+                        <span class="book-info-value">9788936482466</span>
+                    </div>
+                    <div class="book-info-item">
+                        <span class="book-info-label">가격:</span>
+                        <span class="book-info-value">20,000원</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <p>한국사의 거장 강만길(고려대 명예교수)의 『20세기 우리 역사』 증보판이 새롭게 나왔다. 1999년 초간본에 이어 10년 만에 출간된 이번 증보판의 새로 쓴 두 장(제28·29강)에서 저자는, 세번의 대통령선거 패배라는 어려움 끝에 성립한 김대중정권은 대한민국 역사상 최초의 수평적 정권교체로 한국 민주주의의 승리를 이루었을 뿐 아니라, 반세기 넘게 지속된 민족분단의 시대를...</p>
+                </div>
+                <div class="toc-section">
+                    <div class="toc-toggle">
+                        <span class="toggle-icon">▶</span>
+                        <span class="toc-label">📑 차례</span>
+                    </div>
+                    <div class="toc-content">
+                        <div class="toc-text">증보판을 내면서
+강의를 시작하면서
+
+1강의
+한반도는 왜 일본에 강점되었을까요
+2강의
+무단통치와 ‘토지조사사업’의 진상을 알아야 합니다
+3강의
+3·1운동의 역사적 의의는 대단히 큽니다
+4강의
+1920년대 ‘문화정치’의 본질을 알아야 합니다
+5강의
+일제강점 시대, 조선 민중은 어떻게 살았을까요
+6강의
+1920년대의 ‘산미증식계획’은 왜 실시되었을까요
+7강의
+조선공산당운동도 민족해방운동의 일환입니다
+8강의
+민족유일당운동·신간회운동이 추진되었습니다
+9강의
+일제의 ‘병참기지화’도 경제개발로 봐야 할까요
+10강의
+1930년대 ‘만주’에서는 항일무장투쟁이 치열했습니다
+11강의
+임시정부가 좌우익 통일전선정부로 되었습니다
+12강의
+일제 파쇼체제에서도 민족해방운동은 계속됐습니다
+13강의
+해방은 어떻게 왔으며, 38선은 왜 그어졌을까요
+14강의
+통일민족국가 수립에 실패한 과정을 알아야 합니다
+15강의
+해방공간에도 통일민족국가 수립운동은 추진됐습니다
+16강의
+불행하게도 남북 두 분단정권이 성립하였습니다
+17강의
+남한의 농지개혁과 적산불하는 어떻게 되었을까요
+18강의
+6·25전쟁은 왜 일어났으며, 어떤 전쟁이었을까요
+19강의
+독재화한 이승만정권은 무너질 수밖에 없었습니다
+20강의
+4·19‘운동’의 역사적 의의는 무엇일까요
+21강의
+5·16 군사쿠데타는 왜 ‘성공’했을까요
+22강의
+7·4 남북공동성명은 큰 역사적 의미를 지닙니다
+23강의
+박정희정권의 경제건설을 어떻게 봐야 할까요
+24강의
+왜 또 전두환 군사정권이 들어섰을까요
+25강의
+직선제로 노태우 군사정권이 성립했습니다
+26강의
+30년 군사정권 뒤 김영삼 문민정권이 섰습니다만
+27강의
+최초의 수평적 정권교체로 김대중정권이 섰습니다
+28강의
+민족통일의 신기원이 열렸습니다
+
+강의를 마치면서</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <div class="footer">
+            생성일: 2025년 11월 5일 오후 02:03
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.toc-toggle').forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.toggle-icon');
+                    content.classList.toggle('open');
+                    icon.textContent = content.classList.contains('open') ? '▼' : '▶';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
