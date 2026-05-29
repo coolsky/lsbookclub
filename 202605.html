@@ -101,7 +101,7 @@ body {
 /* ────────────────────────────────────────
    TOC — blank br divs 압축 & 링크
 ──────────────────────────────────────── */
-.shine-editor > div:has(> br):not(:has(> a)):not(:first-child) {
+.shine-editor > div:has(> br):not(:has(> a)):not(:first-child):not(.charae-content) {
   line-height: 0.4;
 }
 
@@ -244,7 +244,7 @@ h3::after {
   padding: 14px 20px;
   font-size: 13.5px;
   color: var(--ink-mid);
-  line-height: 2.1;
+  line-height: 2.1 !important;
   font-family: var(--sans);
   margin-bottom: 8px;
 }
