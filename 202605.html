@@ -237,6 +237,32 @@ h3::after {
   display: block;
 }
 
+/* ────────────────────────────────────────
+   BOOK METADATA CARD
+──────────────────────────────────────── */
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 0 4px 4px;
+}
+.meta-price {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.meta-row {
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  line-height: 1.9;
+  white-space: nowrap;
+}
+
 .charae-content {
   background: var(--bg);
   border-left: 3px solid var(--rule);
@@ -385,6 +411,42 @@ a[href="#top"]:hover {
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── 책 정보 메타데이터 재구성 ── */
+  document.querySelectorAll('.shine-table-wrapper > table > tbody > tr > td:not(:first-child)').forEach(function (td) {
+    /* BR과 DIV 경계를 개행으로 변환해 텍스트 추출 */
+    function extractLines(node) {
+      var lines = [], cur = '';
+      function walk(n) {
+        if (n.nodeType === 3) {
+          cur += n.textContent;
+        } else if (n.nodeType === 1) {
+          if (n.tagName === 'BR') { lines.push(cur.trim()); cur = ''; }
+          else { n.childNodes.forEach(walk); if (n.tagName === 'DIV') { lines.push(cur.trim()); cur = ''; } }
+        }
+      }
+      node.childNodes.forEach(walk);
+      if (cur.trim()) lines.push(cur.trim());
+      return lines.filter(Boolean);
+    }
+
+    var lines = extractLines(td);
+    if (!lines.length) return;
+
+    var html = '<div class="book-meta">';
+    lines.forEach(function (line) {
+      if (/정\s+가/.test(line)) {
+        var price = line.replace(/정\s+가\s*:\s*/, '').trim();
+        html += '<div class="meta-price">' + price + '</div>';
+      } else {
+        html += '<div class="meta-row">' + line + '</div>';
+      }
+    });
+    html += '</div>';
+    td.innerHTML = html;
+  });
+
+
   document.querySelectorAll('h3').forEach(function (h3) {
     var nodes = [];
     var node = h3.nextSibling;
