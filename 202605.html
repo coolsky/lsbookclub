@@ -101,7 +101,7 @@ body {
 /* ────────────────────────────────────────
    TOC — blank br divs 압축 & 링크
 ──────────────────────────────────────── */
-.shine-editor > div:has(> br):not(:first-child) {
+.shine-editor > div:has(> br):not(:has(> a)):not(:first-child) {
   line-height: 0.4;
 }
 
@@ -237,15 +237,16 @@ h3::after {
   display: block;
 }
 
-h3 + div {
-  background: var(--bg) !important;
-  border-left: 3px solid var(--rule) !important;
-  border-radius: 0 6px 6px 0 !important;
-  padding: 14px 20px !important;
-  font-size: 13.5px !important;
-  color: var(--ink-mid) !important;
-  line-height: 2.1 !important;
-  font-family: var(--sans) !important;
+.charae-content {
+  background: var(--bg);
+  border-left: 3px solid var(--rule);
+  border-radius: 0 6px 6px 0;
+  padding: 14px 20px;
+  font-size: 13.5px;
+  color: var(--ink-mid);
+  line-height: 2.1;
+  font-family: var(--sans);
+  margin-bottom: 8px;
 }
 
 /* ────────────────────────────────────────
@@ -381,5 +382,35 @@ a[href="#top"]:hover {
 <br>
 <br>나오며 / 참고자료 / 찾아보기<div><br></div><div><a href="https://search.shopping.naver.com/book/catalog/40747441618">자세한 책 정보</a><br></div><div><br></div><div><a href="#top">↑후보 목록으로</a></div><div><br></div><div><br></div><div><br></div></div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('h3').forEach(function (h3) {
+    var nodes = [];
+    var node = h3.nextSibling;
+
+    while (node) {
+      if (node.nodeType === 1) {
+        var tag = node.tagName.toUpperCase();
+        if (tag === 'H1' || tag === 'H3') break;
+        if (tag === 'DIV') {
+          var txt = node.textContent.trim();
+          /* 빈 줄 div, 자세한 책 정보, 후보 목록 링크 div → 여기서 멈춤 */
+          if (txt === '' || txt.indexOf('자세한') >= 0 || txt.indexOf('후보 목록') >= 0) break;
+        }
+      }
+      nodes.push(node);
+      node = node.nextSibling;
+    }
+
+    if (nodes.length === 0) return;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'charae-content';
+    h3.parentNode.insertBefore(wrapper, nodes[0]);
+    nodes.forEach(function (n) { wrapper.appendChild(n); });
+  });
+});
+</script>
 </body>
 </html>
