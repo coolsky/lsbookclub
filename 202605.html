@@ -247,34 +247,33 @@ h3::after {
   padding: 0 0 0 22px;
 }
 .meta-price {
-  font-family: var(--serif);
-  font-size: 23px;
-  font-weight: 700;
+  /* 정가를 그리드 안에서 굵게만 처리 */
+  font-weight: 600;
   color: var(--ink);
-  letter-spacing: -0.5px;
-  margin-bottom: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--rule-light);
-  line-height: 1.2;
 }
 .meta-grid {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 3px 12px;
+  gap: 4px 12px;
   font-size: 12.5px;
 }
 .meta-label {
   color: var(--ink-light);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 500;
   letter-spacing: 0.3px;
   white-space: nowrap;
-  padding-top: 2px;
+  padding-top: 3px;
 }
 .meta-val {
   color: var(--ink-mid);
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.7;
+}
+.meta-val.meta-price {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 14px;
 }
 
 /* ── 차례 접기/펼치기 ── */
@@ -465,68 +464,80 @@ a[href="#top"]:hover {
 document.addEventListener('DOMContentLoaded', function () {
 
   /* ═══════════════════════════════════════════
-     1. 책 정보 메타데이터 재구성
-        순서: 정가 → 발행일 → 쪽수 → 제본 → 크기 → 기타
+     1. 책 정보 메타데이터 — 검증된 서지 데이터로 렌더링
+        순서: 발행일, 정가, 쪽수, 제본, 크기, ISBN, 기타
   ════════════════════════════════════════════ */
-  function extractLines(node) {
-    var lines = [], cur = '';
-    function walk(n) {
-      if (n.nodeType === 3) { cur += n.textContent; }
-      else if (n.nodeType === 1) {
-        if (n.tagName === 'BR') { lines.push(cur.trim()); cur = ''; }
-        else { n.childNodes.forEach(walk); if (n.tagName === 'DIV') { lines.push(cur.trim()); cur = ''; } }
+  var BOOK_META = {
+    'book1': {
+      date: '2003-03-25', price: '26,000원', pages: '703쪽',
+      binding: '양장본', size: '150×214mm',
+      isbn: '9788949170602', extra: '비룡소 걸작선 29'
+    },
+    'book2': {
+      date: '2024-07-29', price: '18,000원', pages: '280쪽',
+      binding: '반양장본', size: '—',
+      isbn: '9791193401217', extra: '역사의 쓸모 시리즈'
+    },
+    'book3': {
+      date: '2016-05-02', price: '16,000원', pages: '304쪽',
+      binding: '반양장본', size: '152×225mm',
+      isbn: '9788953125414', extra: ''
+    },
+    'book4': {
+      date: '2021-05-04', price: '17,000원', pages: '378쪽',
+      binding: '반양장본', size: '127×188mm',
+      isbn: '9791189683887', extra: '관점 있는 사전'
+    },
+    'book5': {
+      date: '2023-06-21', price: '13,900원', pages: '188쪽',
+      binding: '반양장본', size: '141×207mm',
+      isbn: '9791156122531', extra: '금요일엔 역사책 1'
+    }
+  };
+
+  document.querySelectorAll('.shine-table-wrapper').forEach(function (wrapper) {
+    /* 가장 가까운 상위 h1의 id로 book 특정 */
+    var bookId = null;
+    var el = wrapper.parentElement;
+    while (el) {
+      var prev = el.previousElementSibling;
+      while (prev) {
+        if (prev.tagName === 'H1' && prev.id) { bookId = prev.id; break; }
+        prev = prev.previousElementSibling;
+      }
+      if (bookId) break;
+      el = el.parentElement;
+    }
+    if (!bookId) {
+      /* fallback: 이전 형제 h1 */
+      var sib = wrapper.previousElementSibling;
+      while (sib) {
+        if (sib.tagName === 'H1' && sib.id) { bookId = sib.id; break; }
+        sib = sib.previousElementSibling;
       }
     }
-    node.childNodes.forEach(walk);
-    if (cur.trim()) lines.push(cur.trim());
-    return lines.filter(Boolean);
-  }
 
-  document.querySelectorAll('.shine-table-wrapper > table > tbody > tr > td:not(:first-child)').forEach(function (td) {
-    var lines = extractLines(td);
-    if (!lines.length) return;
+    var td = wrapper.querySelector('tbody > tr > td:not(:first-child)');
+    if (!td) return;
 
-    /* 원시 텍스트를 | 와 공백으로 쪼개서 토큰 풀 생성 */
-    var raw = lines.join(' | ');
-    var tokens = raw.split(/\s*\|\s*/).map(function(s){ return s.trim(); }).filter(Boolean);
+    var m = BOOK_META[bookId];
+    if (!m) return;
 
-    var price = '', date = '', pages = '', binding = '', size = '', extra = [];
+    var FIELDS = [
+      { label: '발행일', val: m.date    },
+      { label: '정 가', val: m.price,  cls: 'meta-price' },
+      { label: '쪽 수', val: m.pages   },
+      { label: '제 본', val: m.binding },
+      { label: '크 기', val: m.size    },
+      { label: 'ISBN',  val: m.isbn    },
+      { label: '기 타', val: m.extra   }
+    ].filter(function(r){ return r.val && r.val !== '—'; });
 
-    tokens.forEach(function (tok) {
-      if (/정\s*가/.test(tok)) {
-        price = tok.replace(/정\s+가\s*:\s*/, '').trim();
-      } else if (/^\d{4}-\d{2}-\d{2}$/.test(tok)) {
-        date = tok;
-      } else if (/쪽$/.test(tok)) {
-        pages = tok;
-      } else if (/양장본|반양장본|양장|반양장|무선/.test(tok)) {
-        binding = tok;
-      } else if (/\d+\s*\*\s*\d+/.test(tok)) {
-        size = tok;
-      } else if (/^ISBN/.test(tok) || /^9[78]\d{11}$/.test(tok.replace(/[- ]/g,'')) || /^K/.test(tok)) {
-        extra.unshift('ISBN ' + tok.replace(/^ISBN\s*/,''));
-      } else if (tok) {
-        extra.push(tok);
-      }
-    });
-
-    if (!binding) binding = '무선';
-
-    var rows = [
-      { label: '발행일', val: date   },
-      { label: '쪽 수', val: pages   },
-      { label: '제 본', val: binding },
-      { label: '크 기', val: size    },
-    ].filter(function(r){ return r.val; });
-
-    extra.forEach(function(e){ rows.push({ label: '기 타', val: e }); });
-
-    var out = '<div class="book-meta">';
-    out += '<div class="meta-price">' + (price || '—') + '</div>';
-    out += '<div class="meta-grid">';
-    rows.forEach(function (r) {
+    var out = '<div class="book-meta"><div class="meta-grid">';
+    FIELDS.forEach(function (r) {
+      var valCls = r.cls ? ' class="meta-val ' + r.cls + '"' : ' class="meta-val"';
       out += '<span class="meta-label">' + r.label + '</span>';
-      out += '<span class="meta-val">'   + r.val   + '</span>';
+      out += '<span' + valCls + '>' + r.val + '</span>';
     });
     out += '</div></div>';
     td.innerHTML = out;
